@@ -298,9 +298,9 @@
     position: relative;
     background-color: rgba(0, 0, 0, 0.317);
     overflow: hidden;
-    background-image: url(https://res.cloudinary.com/dxwhz3r81/image/upload/v1704480199/msg1612398179-11606-removebg-preview_3_qx8n7b.png);
+    background-image: url(https://res.cloudinary.com/dxwhz3r81/image/upload/v1697848358/dpp-favic_bh8fwz.png);
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 52%;
+    background-size: 34%;
 }
 </style>

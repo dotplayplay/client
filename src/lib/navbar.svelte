@@ -75,13 +75,11 @@
         {#if newScreen < 580}
           <img alt="logo" style="border-radius: 12px; width:33px"
           class="coin-icon"
-          src="https://res.cloudinary.com/dxwhz3r81/image/upload/v1697848286/dpp-favicon-logo_j53rwc.jpg"
-        />
+          src="https://res.cloudinary.com/dxwhz3r81/image/upload/v1697848286/dpp-favicon-logo_j53rwc.jpg" />
         {:else if newScreen < 900 && $handleisLoggin}
         <img alt="logo" style="border-radius: 12px; width:33px"
         class="coin-icon"
-          src="https://res.cloudinary.com/dxwhz3r81/image/upload/v1697848286/dpp-favicon-logo_j53rwc.jpg"
-        />
+          src="https://res.cloudinary.com/dxwhz3r81/image/upload/v1697848286/dpp-favicon-logo_j53rwc.jpg" />
         {:else}
           <img alt="logo" class="logo-com" src="https://res.cloudinary.com/dxwhz3r81/image/upload/v1697848521/dpp-logowhite_lbifm7.png">
         {/if}
