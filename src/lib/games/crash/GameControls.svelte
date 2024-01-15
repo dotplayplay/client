@@ -8,6 +8,9 @@
   import WalletManager from "./logics/WalletManager";
   import CrashInfoDialog from "./dialogs/GameInfoDialog.svelte";
   import { onMount } from "svelte";
+  import Icon from "svelte-icons-pack/Icon.svelte";
+  import RiSystemArrowUpSLine from "svelte-icons-pack/ri/RiSystemArrowUpSLine";
+  import RiSystemArrowDownSLine from "svelte-icons-pack/ri/RiSystemArrowDownSLine";
   import { crashGameType, crashGame } from "./store";
   import { onDestroy } from "svelte";
   import Decimal from "decimal.js";
@@ -35,7 +38,7 @@
   $: xBetInfo = null;
   $: betRate = 1;
   $: currentAmount = "100.00000000";
-  $: currentXAmount = "1.00000000";
+  $: currentXAmount = "100.00000000";
   $: currentMaxRate = 5000;
   $: xBetting = false;
   $: betting = false;
@@ -384,7 +387,7 @@
               class="sc-iqseJM sc-egiyK cBmlor fnKcEH button button-big sc-ywFzA qPdve"
               ><div class="button-inner" style="width: 100%;">
                 <div class="monospace" style="width: 100%">
-                  {`${parseFloat(currentGamePayout).toFixed(8)} ${
+                  {`${parseFloat(currentGamePayout).toFixed(4)} ${
                     betInfo.currencyName
                   }`}
                 </div>
@@ -515,25 +518,15 @@
                       e.stopPropagation();
                       if (betting) return;
                       sliderOpened = { classic: true };
-                    }}
-                    ><svg
-                      xmlns:xlink="http://www.w3.org/1999/xlink"
-                      class="sc-gsDKAQ hxODWG icon"
-                      ><use xlink:href="#icon_Arrow"></use></svg
-                    ><svg
-                      xmlns:xlink="http://www.w3.org/1999/xlink"
-                      class="sc-gsDKAQ hxODWG icon"
-                      ><use xlink:href="#icon_Arrow"></use></svg
-                    ></button
-                  >
+                    }}>
+                    <Icon src={RiSystemArrowUpSLine}  size="20"  color="rgba(153, 164, 176, 0.6)" />
+                    <Icon src={RiSystemArrowDownSLine}  size="20"  color="rgba(153, 164, 176, 0.6)"  />
+                    </button>
                 </div>
               </div>
             </div>
             <div
-              class="sc-ezbkAF hzTJOu input sc-gLDmcm fKDjWC {betting
-                ? 'disabled'
-                : ''}"
-            >
+              class="sc-ezbkAF hzTJOu input sc-gLDmcm fKDjWC {betting ? 'disabled' : ''}">
               <div class="input-label">
                 <div class="chance-title">
                   <div class="auto-title">Auto cash out&nbsp;</div>
@@ -2155,7 +2148,16 @@
     align-items: center;
     margin-top: 1rem;
   }
-
+  .eWZHfu.button {
+    color: rgb(245, 246, 247);
+    box-shadow: rgba(29, 34, 37, 0.1) 0px 4px 8px 0px;
+    background-color: rgb(88, 26, 196);
+    background-image: conic-gradient(
+      from 1turn,
+      rgb(88, 26, 196),
+      rgb(119, 60, 253)
+    );
+  }
   .dDAoYq .action-close {
     margin-left: 1.25rem;
   }

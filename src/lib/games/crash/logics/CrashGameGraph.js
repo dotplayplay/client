@@ -3,8 +3,7 @@ const { debounce } = pkg;
 import EventEmitter from "./EventEmitter";
 import { gsap } from "gsap";
 
-
-  // Game status enum
+// Game status enum
 const GameStatus = {
   0: 'CONNECTION',
   1: 'STARTING',

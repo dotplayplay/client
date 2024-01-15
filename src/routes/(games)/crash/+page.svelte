@@ -1,50 +1,48 @@
 <script>
-  import { browser } from "$app/environment";
-  import { screen, is_open__Appp, is_open__chat } from "$lib/store/screen";
-  import GameControls from "$lib/games/crash/GameControls.svelte";
-  import GameActions from "$lib/games/crash/GameActions.svelte";
-  import GameView from "$lib/games/crash/GameView.svelte";
-  import AllBets from "$lib/games/crash/AllBets.svelte";
-  import MyBets from "$lib/games/crash/MyBets.svelte";
-  import GameHeader from "$lib/games/crash/GameHeader.svelte";
-  import LiveBets from "$lib/games/crash/LiveBets.svelte";
-  import { crashGame } from "$lib/games/crash/store";
-  import { onMount } from "svelte";
-  import CrashGame from "$lib/games/crash/logics/CrashGame";
+import { browser } from "$app/environment";
+import { screen, is_open__Appp, is_open__chat } from "$lib/store/screen";
+import GameControls from "$lib/games/crash/GameControls.svelte";
+import GameActions from "$lib/games/crash/GameActions.svelte";
+import GameView from "$lib/games/crash/GameView.svelte";
+import AllBets from "$lib/games/crash/AllBets.svelte";
+import MyBets from "$lib/games/crash/MyBets.svelte";
+import GameHeader from "$lib/games/crash/GameHeader.svelte";
+import LiveBets from "$lib/games/crash/LiveBets.svelte";
+import { crashGame } from "$lib/games/crash/store";
+import { onMount } from "svelte";
+import CrashGame from "$lib/games/crash/logics/CrashGame";
 
+$: newScreen = 0
+$: {
+  if($is_open__Appp && !$is_open__chat){
+    newScreen = $screen - 240
+  }
+  else if(!$is_open__Appp && $is_open__chat){
+    newScreen = $screen - 432
+  }
+  else if(!$is_open__Appp && !$is_open__chat){
+    newScreen = $screen - 72
+  }
+  else if($is_open__Appp && $is_open__chat){
+    newScreen = $screen - 600
+  }
+}
 
-
-  $: newScreen = 0
-  $: {
-    if($is_open__Appp && !$is_open__chat){
-      newScreen = $screen - 240
-    }
-    else if(!$is_open__Appp && $is_open__chat){
-      newScreen = $screen - 432
-    }
-    else if(!$is_open__Appp && !$is_open__chat){
-      newScreen = $screen - 72
-    }
-    else if($is_open__Appp && $is_open__chat){
-      newScreen = $screen - 600
+$: tabOffset = newScreen > 900 ? 0 : 1;
+$: currentTab = !tabOffset && currentTab === 3 ? 1 : (currentTab || 1);
+$: gameInit = false;
+onMount(async () => {
+  if (browser) {
+    try {
+      const gameInstance = new CrashGame();
+      await gameInstance.initialize();
+      crashGame.set(gameInstance);
+      gameInit = true;
+    } catch (error) {
+      console.log("Error init game ", error);
     }
   }
-
-  $: tabOffset = newScreen > 900 ? 0 : 1;
-  $: currentTab = !tabOffset && currentTab === 3 ? 1 : (currentTab || 1);
-  $: gameInit = false;
-  onMount(async () => {
-    if (browser) {
-      try {
-        const gameInstance = new CrashGame();
-        await gameInstance.initialize();
-        crashGame.set(gameInstance);
-        gameInit = true;
-      } catch (error) {
-        console.log("Error init game ", error);
-      }
-    }
-  });
+});
 
 </script>
 
@@ -65,20 +63,16 @@
       {#if Boolean(tabOffset)}
       <button
       on:click={() => (currentTab = 1)}
-      class="tabs-nav {currentTab === 1 ? 'is-active' : ''}">All Bets</button
-    >
-      {/if}
+      class="tabs-nav {currentTab === 1 ? 'is-active' : ''}">All Bets</button>
+    {/if}
       <button
         on:click={() => (currentTab = 1 + tabOffset)}
-        class="tabs-nav {currentTab === 1 + tabOffset ? 'is-active' : ''}">My Bets</button
-      ><button
+        class="tabs-nav {currentTab === 1 + tabOffset ? 'is-active' : ''}">My Bets</button><button
         on:click={() => (currentTab = 2 + tabOffset)}
-        class="tabs-nav {currentTab === 2 + tabOffset ? 'is-active' : ''}">History</button
-      >
+        class="tabs-nav {currentTab === 2 + tabOffset ? 'is-active' : ''}">History</button>
       <div
         class="bg"
-        style="width: {100 /(Boolean(tabOffset) ? 3 : 2)}%; left: {(Boolean(tabOffset) ? (100/3) : 50) * (Boolean(tabOffset) ? (currentTab - tabOffset) : currentTab - 1)}%;"
-      ></div>
+        style="width: {100 /(Boolean(tabOffset) ? 3 : 2)}%; left: {(Boolean(tabOffset) ? (100/3) : 50) * (Boolean(tabOffset) ? (currentTab - tabOffset) : currentTab - 1)}%;"></div>
     </div>
     <div class="tabs-view" style="transform: none;">
       {#if Boolean(tabOffset) && currentTab === 1}

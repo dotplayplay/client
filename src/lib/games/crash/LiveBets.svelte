@@ -164,19 +164,18 @@
                       >{#if player.rate > 0}
                         {player.rate.toFixed(2) + "x"}
                       {:else if gameStatus === 3}
-                        "bang"
+                        bang
                       {:else}
-                        "betting"
-                      {/if}</span
-                    ></td
-                  ><td
-                    ><div
+                        betting
+                      {/if}</span>
+                    </td>
+                    <td>
+                      <div
                       class="sc-Galmp erPQzq coin notranslate {player.rate > 0
                         ? 'is-win'
                         : gameStatus === 3
                           ? 'is-lose'
-                          : ''}"
-                    >
+                          : ''}">
                       <img
                         alt=""
                         class="coin-icon"
@@ -218,7 +217,7 @@
                         </div>
                       </div>
                     {:else if gameStatus === 3}
-                      "bang"
+                      bang
                     {:else}
                       <span class="ttl opacity">Betting</span>
                     {/if}

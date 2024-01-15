@@ -1,11 +1,4 @@
-import {
-  makeObservable,
-  observable,
-  computed,
-  action,
-  runInAction,
-  reaction,
-} from "mobx";
+import { makeObservable,  observable, computed, action, runInAction, reaction} from "mobx";
 import CryptoJS from "crypto-js";
 import BaseGame from "./BaseGame";
 import CrashGameGraph from "./CrashGameGraph";
@@ -14,8 +7,9 @@ import Decimal from "decimal.js";
 import { sortedIndexBy } from "lodash";
 import UserStore from "./UserStore";
 import WalletManager from "./WalletManager";
-import { ServerURl } from "../../../backendUrl";
+import { ServerURl } from "$lib/backendUrl";
 import axios from "axios";
+
 function Bn(seed) {
   // t = t.slice(0, 13);
   // let e = parseInt(t, 16) / Math.pow(16, 13);
@@ -72,34 +66,34 @@ async function currencInfo() {
     normalBetLimits: [
       {
         currencyName: "PPL",
-        minAmount: 1,
+        minAmount: 100,
         maxAmount: 200,
       },
       {
         currencyName: "USDT",
-        minAmount: 1,
+        minAmount: 0.1,
         maxAmount: 200,
       },
       {
         currencyName: "PPF",
-        minAmount: 1,
+        minAmount: 100,
         maxAmount: 200,
       },
     ],
     xbetLimits: [
       {
         currencyName: "PPL",
-        minAmount: 1,
+        minAmount: 100,
         maxAmount: 200,
       },
       {
         currencyName: "USDT",
-        minAmount: 1,
+        minAmount: 0.1,
         maxAmount: 200,
       },
       {
         currencyName: "PPF",
-        minAmount: 1,
+        minAmount: 100,
         maxAmount: 200,
       },
     ],
@@ -139,8 +133,7 @@ export default class CrashGame extends BaseGame {
     this.nextBetInfo = null;
     this.paused = false;
     this.checkPauseTimer = 0;
-    this.salt =
-      "Qede00000000000w00wd001bw4dc6a1e86083f95500b096231436e9b25cbdd0075c4";
+    this.salt = "Qede00000000000w00wd001bw4dc6a1e86083f95500b096231436e9b25cbdd0075c4";
     this.xbet = new CrashXBetHandler(this);
     this.showXbetLimit = true;
     this.graph = new CrashGameGraph(this);
@@ -375,7 +368,7 @@ export default class CrashGame extends BaseGame {
       }
 
       player.rate = rate;
-      console.log("Player data > ", { ...player })
+      // console.log("Player data > ", { ...player })
       this.emit("player_change");
       this.emit("escape", { ...player });
     }

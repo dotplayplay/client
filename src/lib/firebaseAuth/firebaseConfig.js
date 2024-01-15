@@ -1,12 +1,12 @@
 
 export const firebaseConfiguration = (()=>{
      const firebaseConfi = {
-        apiKey: "AIzaSyDzL_p8OCtR6iGfZ2I8toqHN_NIc_Igp9o",
-        authDomain: "betarena-d3440.firebaseapp.com",
-        projectId: "betarena-d3440",
-        storageBucket: "betarena-d3440.appspot.com",
-        messagingSenderId: "451989054651",
-        appId: "1:451989054651:web:3eca57de504dcf6245b59e"
+        apiKey: "AIzaSyDzTvAEBt59YRXXHcddEN-jPCpYL17zYRQ",
+        authDomain: "dotplayplay-1692584380329.firebaseapp.com",
+        projectId: "dotplayplay-1692584380329",
+        storageBucket: "dotplayplay-1692584380329.appspot.com",
+        messagingSenderId: "934101502841",
+        appId: "1:934101502841:web:7c618c3beffda794a3bda8"
     };
     return firebaseConfi
 })

@@ -102,7 +102,7 @@
       <img
         alt="logo"
         class="sc-bOtlzW QccSQ"
-        src="https://res.cloudinary.com/dxwhz3r81/image/upload/v1704480199/msg1612398179-11606-removebg-preview_3_qx8n7b.png"
+        src="https://res.cloudinary.com/dxwhz3r81/image/upload/v1697848521/dpp-logowhite_lbifm7.png"
       />
     </div>
 
@@ -469,8 +469,8 @@
   }
 
   .QccSQ {
-    height: 3.7rem;
-    margin: 0rem -10px;
+    height: 1.7rem;
+    margin: 2rem 10px;
   }
 
   .iajVfs .other-group button {

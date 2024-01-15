@@ -294,31 +294,24 @@
           ></thead
         ><tbody>
           {#each pageHistoryList as game (game.gameId)}
-            <tr
-              on:click={() => {
-                dialogData = {
-                  startScreen: "All Players",
-                  gameID: game.gameId,
-                };
-              }}
-              ><td
-                ><div class="game-link">
-                  <div
-                    class="dot type-{game.odds >= 10
-                      ? 3
-                      : game.odds >= 2
-                        ? 2
-                        : 1}"
-                  ></div>
+            <tr>
+              <td>
+                <button on:click={() => {
+                  dialogData = {
+                    startScreen: "All Players",
+                    gameID: game.gameId,
+                  };
+                }} class="game-link">
+                  <div class="dot type-{game.odds >= 10 ? 3 : game.odds >= 2 ? 2 : 1}"></div>
                   {game.gameId}
-                </div></td
-              ><td>{game.odds}x</td><td
+                </button>
+                </td>
+                <td>{game.odds}x</td><td
                 ><div class="flex-center">
-                  <input type="text" readonly="" value={game.hash} /><a
-                    target="_blank"
-                    href="https://nanogamesio.github.io/verify/crash.html?hash={game.hash}"
-                    >Verify</a
-                  >
+                  <input type="text" readonly="" value={game.hash} />
+                  <a target="_blank" href={`https://dppgames.netlify.app/verify/crash?hash=${game.hash}`}>
+                    Verify
+                </a>
                 </div></td
               ></tr
             >
@@ -555,6 +548,10 @@
     -webkit-box-align: center;
     align-items: center;
     cursor: pointer;
+  }
+  .iovqrr .game-link:hover {
+    text-decoration: underline;
+    color: rgb(67, 179, 9);
   }
   .iovqrr .dot.type-3 {
     background-color: rgb(246, 199, 34);
@@ -811,6 +808,35 @@
     height: 2.375rem;
   }
 
+  .fnKcEH.button {
+    color: rgb(245, 246, 247);
+    box-shadow: rgba(29, 34, 37, 0.1) 0px 4px 8px 0px;
+    background-color: rgb(67, 179, 9);
+    background-image: conic-gradient(
+      from 1turn,
+      rgb(67, 179, 9),
+      rgb(93, 219, 28)
+    );
+  }
+
+  .cBmlor {
+    display: block;
+    width: 100%;
+    border-radius: 6.25rem;
+    height: 3rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.36, 0.66, 0.04, 1) 0s;
+  }
+  .cBmlor > .button-inner {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
   .kJYcMw table {
     margin: 1.25rem 0px;
   }
