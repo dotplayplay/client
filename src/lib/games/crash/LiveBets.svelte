@@ -133,14 +133,11 @@
           <table class="sc-gWXbKe iUeetX table is-hover">
             <tbody>
               {#each players as player (player.userId)}
-                <tr
-                  ><td class="user"
-                    ><a
-                      class="sc-jUosCB iTDswZ user-info"
-                      href="/user/profile/{player.userId}"
-                      ><img
-                        alt=""
-                        class="avatar"
+                <tr>
+                  <td class="user">
+                    <a class="sc-jUosCB iTDswZ user-info"
+                      href="/user/profile/{player.userId}">
+                      <img alt="" class="avatar"
                         src={player.hidden
                           ? "/assets/avatar.a1ff78fe.png"
                           : player.avatar}
@@ -183,9 +180,9 @@
                       />
                       <div class="amount">
                         <span class="amount-str"
-                          >{removeTrailingZeros(player.bet.toFixed(8))}<span
+                          >{removeTrailingZeros(player.bet.toFixed(4))}<span
                             class="suffix"
-                            >{getSuffix(player.bet.toFixed(8))}</span
+                            >{getSuffix(player.bet.toFixed(4))}</span
                           ></span
                         >
                       </div>
@@ -341,9 +338,9 @@
                         <img alt="" class="coin-icon" src={bet.currencyImage} />
                         <div class="amount">
                           <span class="amount-str"
-                            >{removeTrailingZeros(bet.bet.toFixed(8))}<span
+                            >{removeTrailingZeros(bet.bet.toFixed(4))}<span
                               class="suffix"
-                              >{getSuffix(bet.bet.toFixed(8))}</span
+                              >{getSuffix(bet.bet.toFixed(4))}</span
                             ></span
                           >
                         </div>
