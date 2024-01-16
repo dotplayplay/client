@@ -316,7 +316,7 @@
                 ><div class="flex-center">
                   <input type="text" readonly="" value={game.hash} /><a
                     target="_blank"
-                    href="https://nanogamesio.github.io/verify/crash.html?hash={game.hash}"
+                    href="https://dppgames.netlify.app/verify/crash?hash={game.hash}"
                     >Verify</a
                   >
                 </div></td
