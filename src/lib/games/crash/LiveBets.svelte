@@ -3,10 +3,10 @@
 </script>
 
 <script>
+  import { screen } from "$lib/store/screen";
   import { onDestroy, onMount } from "svelte";
   import { crashGameType, crashGame } from "./store";
-  import useFormatter from "./hooks/formatter";
-  import { screen, is_open__Appp, is_open__chat } from "$lib/store/screen";
+  import useFormatter from "$lib/hook/formatter";
   const { autorun } = connect();
   const { removeTrailingZeros, getSuffix } = useFormatter();
   $: trendBetActive = false;
@@ -74,27 +74,10 @@
       showingMore = false;
     });
   });
-
-  $: newScreen = 0
-  $: {
-    if($is_open__Appp && !$is_open__chat){
-      newScreen = $screen - 240
-    }
-    else if(!$is_open__Appp && $is_open__chat){
-      newScreen = $screen - 432
-    }
-    else if(!$is_open__Appp && !$is_open__chat){
-      newScreen = $screen - 72
-    }
-    else if($is_open__Appp && $is_open__chat){
-      newScreen = $screen - 600
-    }
-  }
-
 </script>
 
-<div class="sc-czvZiG gnytwz  {newScreen < 900 ? "mobile-view" : ""}">
-  {#if newScreen > 900}
+<div class="sc-czvZiG gnytwz  {$screen < 1051 ? "mobile-view" : ""}">
+  {#if $screen > 1050}
     <div class="top">
     <div class="title">All Bets</div>
 
@@ -133,11 +116,14 @@
           <table class="sc-gWXbKe iUeetX table is-hover">
             <tbody>
               {#each players as player (player.userId)}
-                <tr>
-                  <td class="user">
-                    <a class="sc-jUosCB iTDswZ user-info"
-                      href="/user/profile/{player.userId}">
-                      <img alt="" class="avatar"
+                <tr
+                  ><td class="user"
+                    ><a
+                      class="sc-jUosCB iTDswZ user-info"
+                      href="/user/profile/{player.userId}"
+                      ><img
+                        alt=""
+                        class="avatar"
                         src={player.hidden
                           ? "/assets/avatar.a1ff78fe.png"
                           : player.avatar}
@@ -161,18 +147,19 @@
                       >{#if player.rate > 0}
                         {player.rate.toFixed(2) + "x"}
                       {:else if gameStatus === 3}
-                        bang
+                        "bang"
                       {:else}
-                        betting
-                      {/if}</span>
-                    </td>
-                    <td>
-                      <div
+                        "betting"
+                      {/if}</span
+                    ></td
+                  ><td
+                    ><div
                       class="sc-Galmp erPQzq coin notranslate {player.rate > 0
                         ? 'is-win'
                         : gameStatus === 3
                           ? 'is-lose'
-                          : ''}">
+                          : ''}"
+                    >
                       <img
                         alt=""
                         class="coin-icon"
@@ -180,9 +167,9 @@
                       />
                       <div class="amount">
                         <span class="amount-str"
-                          >{removeTrailingZeros(player.bet.toFixed(4))}<span
+                          >{removeTrailingZeros(player.bet.toFixed(8))}<span
                             class="suffix"
-                            >{getSuffix(player.bet.toFixed(4))}</span
+                            >{getSuffix(player.bet.toFixed(8))}</span
                           ></span
                         >
                       </div>
@@ -214,7 +201,7 @@
                         </div>
                       </div>
                     {:else if gameStatus === 3}
-                      bang
+                      "bang"
                     {:else}
                       <span class="ttl opacity">Betting</span>
                     {/if}
@@ -338,9 +325,9 @@
                         <img alt="" class="coin-icon" src={bet.currencyImage} />
                         <div class="amount">
                           <span class="amount-str"
-                            >{removeTrailingZeros(bet.bet.toFixed(4))}<span
+                            >{removeTrailingZeros(bet.bet.toFixed(8))}<span
                               class="suffix"
-                              >{getSuffix(bet.bet.toFixed(4))}</span
+                              >{getSuffix(bet.bet.toFixed(8))}</span
                             ></span
                           >
                         </div>

@@ -1,11 +1,7 @@
 <script>
-  import Icon from 'svelte-icons-pack/Icon.svelte';
-  import AiOutlineQuestionCircle from "svelte-icons-pack/ai/AiOutlineQuestionCircle";
   import { screen } from "$lib/store/screen";
   import CrashInfoDialog from "./dialogs/GameInfoDialog.svelte";
   import LiveStats from "./dialogs/LiveStats.svelte";
-  import RiMapGuideFill from "svelte-icons-pack/ri/RiMapGuideFill";
-  import BiSolidKeyboard from "svelte-icons-pack/bi/BiSolidKeyboard";
   $: dialogData = null;
   $: showingStats = false;
 </script>
@@ -27,13 +23,20 @@
           startScreen: "Hot keys",
         };
       }}
-      class="action-item">
-      <Icon src={BiSolidKeyboard}  size="23"  color={`rgba(153, 164, 176, 0.6)`} title="Hot keys" />
-      </button>
+      class="action-item"
+      ><svg
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        class="sc-gsDKAQ hxODWG icon"
+        ><use xlink:href="#icon_HotKeys"></use></svg
+      ></button
+    >
   {/if}
-  <button on:click={() => (showingStats = true)} class="action-item">
-    <Icon src={RiMapGuideFill}  size="23"  color={`rgba(153, 164, 176, 0.6)`} title="Live stat" />
-    </button
+  <button on:click={() => (showingStats = true)} class="action-item"
+    ><svg
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      class="sc-gsDKAQ hxODWG icon"
+      ><use xlink:href="#icon_LiveStats"></use></svg
+    ></button
   ><button
     on:click={() => {
       dialogData = {
@@ -41,9 +44,10 @@
       };
     }}
     class="action-item"
-    >
-    <Icon src={AiOutlineQuestionCircle}  size="23"  color={`rgba(153, 164, 176, 0.6)`} title="Help" />
-    </button
+    ><svg
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      class="sc-gsDKAQ hxODWG icon"><use xlink:href="#icon_Help"></use></svg
+    ></button
   >
 </div>
 
@@ -63,7 +67,10 @@
   .action-item:hover {
     background: rgba(49, 52, 60, 0.35);
   }
-
+  .action-item:hover .icon {
+    font-size: 1rem;
+    fill: rgb(245, 246, 247);
+  }
   .action-item {
     cursor: pointer;
     margin-right: 0.5rem;
@@ -75,6 +82,16 @@
     align-items: center;
     -webkit-box-pack: center;
     justify-content: center;
+  }
+  .gJxbeS .action-item .icon {
+    fill: rgb(153, 164, 176);
+    transition: all 0.3s ease-in-out 0s;
+  }
+
+  .hxODWG {
+    width: 1.4em;
+    height: 1.4em;
+    fill: rgba(153, 164, 176, 0.6);
   }
   .game-actions::after {
     content: "";

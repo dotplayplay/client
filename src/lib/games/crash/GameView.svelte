@@ -6,9 +6,6 @@
   import TrendDialog from "./dialogs/trends/layout.svelte";
   import CrashInfoDialog from "./dialogs/GameInfoDialog.svelte";
   import { onMount, onDestroy } from "svelte";
-  import Icon from "svelte-icons-pack/Icon.svelte";
-  import AiOutlineMenuUnfold from "svelte-icons-pack/ai/AiOutlineMenuUnfold";
-  import { screen } from "$lib/store/screen"
   const { autorun } = connect();
   import Decimal from "decimal.js";
   import pkg from "lodash";
@@ -119,10 +116,6 @@
     }
   }
   $: dialogData = null;
-
-
-
-
 </script>
 
 {#if Boolean(dialogData)}
@@ -136,13 +129,6 @@
 {/if}
 <div class="game-view">
   <div class="sc-hoHwyw fIoiVG game-recent sc-bjztik kQtbd">
-    <!-- <div class="sc-lheXJl lhEJig jackpot-enter">
-      <div class="title"><span class="tit">Bankroll</span><span>CUB</span></div>
-      <div class="sc-Galmp erPQzq coin notranslate">
-        <img a class="coin-icon" src="/coin/BTC.black.png" />
-        <div class="amount"><span class="amount-str">4610093.31</span></div>
-      </div>
-    </div> -->
     <div bind:this={betsContainer} class="recent-list-wrap">
       <div class="recent-list" style="transform: translate(0%, 0px);">
         {#each gameHistory as game, index (`${index}_${game.gameId}`)}
@@ -170,14 +156,22 @@
             </div>
           </div>
         {/each}
+        {#if !Boolean(gameHistory.length)}
+          <div class="empty-item">
+            <p>Game results will be displayed here.</p>
+          </div>
+        {/if}
       </div>
     </div>
-    {#if $screen > 650}
-    <button on:click={() => (showTrends = !showTrends)} class="sc-iLOkMM kCvsnZ flex-center">
-      <Icon src={AiOutlineMenuUnfold} size="20" color={"rgba(153, 164, 176, 0.8)"} className="custom-icon" />
-      <div>Trends</div>
-    </button>
-    {/if}
+    <button
+      on:click={() => (showTrends = !showTrends)}
+      class="sc-iLOkMM kCvsnZ flex-center"
+      ><svg
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        class="sc-gsDKAQ hxODWG icon"><use xlink:href="#icon_Trends"></use></svg
+      >
+      <div>Trends</div></button
+    >
   </div>
   <div class="sc-hcupDf dqwCNK game-box sc-eZKLwX gcZuwC">
     <div class="sc-gLDmcm gnjHQb house-edge"><span>House Edge 1%</span></div>
@@ -186,7 +180,9 @@
         <div class="Le">
           <div class="msg">
             <span>Won</span>
-            <span class="amount">{winData.profitAmount} {winData.currencyName}</span>
+            <span class="amount"
+              >{winData.profitAmount} {winData.currencyName}</span
+            >
           </div>
           <img
             alt=""
@@ -351,7 +347,22 @@
     justify-content: center;
     align-items: center;
   }
+  .kCvsnZ .icon {
+    margin-right: 0.375rem;
+  }
 
+  .hxODWG {
+    width: 1.4em;
+    height: 1.4em;
+    fill: rgba(153, 164, 176, 0.6);
+  }
+  .gcZuwC {
+    position: relative;
+    flex: 1 1 0%;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 1.875rem 1.875rem;
+  }
   .dqwCNK {
     position: relative;
   }
@@ -369,7 +380,13 @@
     color: rgba(153, 164, 176, 0.6);
     background-color: rgba(49, 52, 60, 0.4);
   }
-
+  .dgiRGq {
+    position: relative;
+    margin-top: 1.875rem;
+    margin-bottom: 1.25rem;
+    min-height: 300px;
+    height: 100%;
+  }
   .dgiRGq > canvas {
     position: absolute;
     width: 100%;
@@ -388,36 +405,10 @@
     bottom: -1px;
     width: 100%;
   }
-  @media only screen and (max-width:650px){
-    .gcZuwC {
-      position: relative;
-      flex: 1 1 0%;
-      display: flex;
-      flex-direction: column;
-    }
-    .dgiRGq {
-      position: relative;
-      margin-top: 1.875rem;
-      margin-bottom: 1.25rem;
-      min-height: 170px;
-      height: 100%;
-    }
-  }
-
-  @media only screen and (min-width:650px){
-    .gcZuwC {
-      position: relative;
-      flex: 1 1 0%;
-      display: flex;
-      flex-direction: column;
-      padding: 0px 1.875rem 1.875rem;
-    }
-    .dgiRGq {
-      position: relative;
-      margin-top: 1.875rem;
-      margin-bottom: 1.25rem;
-      min-height: 300px;
-      height: 100%;
-    }
+  .empty-item {
+    text-align: center;
+    display: flex;
+    padding: 7px 120px 0 9px;
+    justify-content: center;
   }
 </style>

@@ -40,7 +40,7 @@
       if (error) {
         throw new Error(error.response?.data?.message || error.message)
       } else {
-        error_mgs.set("Seeds Updated!")
+        error_msg.set("Seeds Updated!")
       }
       dispatch("close", fromDetail);
     } catch (error) {
@@ -283,5 +283,33 @@
   .iGYNgq .submit {
     margin: 1.25rem 0px 3.75rem;
     padding: 0px 3.125rem;
+  }
+  .fnKcEH.button {
+    color: rgb(245, 246, 247);
+    box-shadow: rgba(29, 34, 37, 0.1) 0px 4px 8px 0px;
+    background-color: rgb(67, 179, 9);
+    background-image: conic-gradient(
+      from 1turn,
+      rgb(67, 179, 9),
+      rgb(93, 219, 28)
+    );
+  }
+  .cBmlor {
+    display: block;
+    width: 100%;
+    border-radius: 6.25rem;
+    height: 3rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.36, 0.66, 0.04, 1) 0s;
+  }
+  .cBmlor > .button-inner {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
   }
 </style>

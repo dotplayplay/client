@@ -294,24 +294,31 @@
           ></thead
         ><tbody>
           {#each pageHistoryList as game (game.gameId)}
-            <tr>
-              <td>
-                <button on:click={() => {
-                  dialogData = {
-                    startScreen: "All Players",
-                    gameID: game.gameId,
-                  };
-                }} class="game-link">
-                  <div class="dot type-{game.odds >= 10 ? 3 : game.odds >= 2 ? 2 : 1}"></div>
+            <tr
+              on:click={() => {
+                dialogData = {
+                  startScreen: "All Players",
+                  gameID: game.gameId,
+                };
+              }}
+              ><td
+                ><div class="game-link">
+                  <div
+                    class="dot type-{game.odds >= 10
+                      ? 3
+                      : game.odds >= 2
+                        ? 2
+                        : 1}"
+                  ></div>
                   {game.gameId}
-                </button>
-                </td>
-                <td>{game.odds}x</td><td
+                </div></td
+              ><td>{game.odds}x</td><td
                 ><div class="flex-center">
-                  <input type="text" readonly="" value={game.hash} />
-                  <a target="_blank" href={`https://dppgames.netlify.app/verify/crash?hash=${game.hash}`}>
-                    Verify
-                </a>
+                  <input type="text" readonly="" value={game.hash} /><a
+                    target="_blank"
+                    href="https://nanogamesio.github.io/verify/crash.html?hash={game.hash}"
+                    >Verify</a
+                  >
                 </div></td
               ></tr
             >
@@ -548,10 +555,6 @@
     -webkit-box-align: center;
     align-items: center;
     cursor: pointer;
-  }
-  .iovqrr .game-link:hover {
-    text-decoration: underline;
-    color: rgb(67, 179, 9);
   }
   .iovqrr .dot.type-3 {
     background-color: rgb(246, 199, 34);

@@ -1,18 +1,19 @@
 <script>
   import { browser } from "$app/environment";
-  import { fly } from 'svelte/transition';
-  import { cubicOut } from 'svelte/easing';
+  import { fly } from "svelte/transition";
+  import { cubicOut } from "svelte/easing";
   import { onMount, createEventDispatcher, onDestroy } from "svelte";
   import lottie from "lottie-web";
   import Point from "./components/point.svelte";
   import SSuit from "./components/ssuit.svelte";
   import Suit from "./components/suit.svelte";
   import useDeck from "./hooks/deck";
-  import useLiveStats from "./hooks/livestats";
-  import useFormatter from "./hooks/formatter";
+  import useLiveStats from "$lib/hook/livestats";
+  import useFormatter from "$lib/hook/formatter";
+  import {liveStats} from "./store";
   const { getCardSuite, suites } = useDeck();
   const { removeTrailingZeros, getSuffix } = useFormatter();
-  const { recordGame } = useLiveStats();
+  const { recordGame } = useLiveStats(liveStats, "HILO_LIVE_STATS");
   import {
     soundManager,
     hilo_game,
@@ -39,8 +40,8 @@
   $: gameWinData = {
     payout: "0.00",
     profit: "0.000000",
-    token_img: "/coin/BTC.black.png"
-  }
+    token_img: "/coin/BTC.black.png",
+  };
 
   $: {
     if (browser) {
@@ -91,8 +92,8 @@
               gameWinData = {
                 profit: game.profit.toFixed(4),
                 payout: game.payout.toFixed(2),
-                token_img: game.token_img
-              }
+                token_img: game.token_img,
+              };
               notifyWin = true;
 
               setTimeout(() => (notifyWin = false), 4000);
@@ -119,8 +120,12 @@
         }
         if (!!gameCache || rounds.length === 1) {
           setTimeout(() => {
-            cardActivate = { ...cardActivate, ...{ [currentRound.round]: "active" } };
-          }, 400);
+            const old =
+              rounds.length === 1 && Object.keys(cardActivate).length > 1
+                ? {}
+                : cardActivate;
+            cardActivate = { ...old, ...{ [currentRound.round]: "active" } };
+          }, 250);
         } else {
           const _active = {};
           rounds.forEach(({ round }) => {
@@ -160,6 +165,11 @@
             </div>
           </div>
         {/each}
+        {#if !Boolean($userBets.length)}
+          <div class="empty-item">
+            <p>Game results will be displayed here.</p>
+          </div>
+        {/if}
       </div>
     </div>
   </div>
@@ -201,10 +211,8 @@
                 <div class="sc-eZKLwX kkALZz card">
                   <div class="card-back"></div>
                   <div class="card-front">
-                    <div class="point">
-                    </div>
-                    <div class="ssuit">
-                    </div>
+                    <div class="point"></div>
+                    <div class="ssuit"></div>
                     <div class=""></div>
                   </div>
                 </div>
@@ -213,10 +221,8 @@
                 <div class="sc-eZKLwX kkALZz card">
                   <div class="card-back"></div>
                   <div class="card-front">
-                    <div class="point">
-                    </div>
-                    <div class="ssuit">
-                    </div>
+                    <div class="point"></div>
+                    <div class="ssuit"></div>
                     <div class=""></div>
                   </div>
                 </div>
@@ -225,10 +231,8 @@
                 <div class="sc-eZKLwX kkALZz card">
                   <div class="card-back"></div>
                   <div class="card-front">
-                    <div class="point">
-                    </div>
-                    <div class="ssuit">
-                    </div>
+                    <div class="point"></div>
+                    <div class="ssuit"></div>
                     <div class=""></div>
                   </div>
                 </div>
@@ -237,10 +241,8 @@
                 <div class="sc-eZKLwX kkALZz card">
                   <div class="card-back"></div>
                   <div class="card-front">
-                    <div class="point">
-                    </div>
-                    <div class="ssuit">
-                    </div>
+                    <div class="point"></div>
+                    <div class="ssuit"></div>
                     <div class=""></div>
                   </div>
                 </div>
@@ -249,10 +251,8 @@
                 <div class="sc-eZKLwX kkALZz card">
                   <div class="card-back"></div>
                   <div class="card-front">
-                    <div class="point">
-                    </div>
-                    <div class="ssuit">
-                    </div>
+                    <div class="point"></div>
+                    <div class="ssuit"></div>
                     <div class=""></div>
                   </div>
                 </div>
@@ -407,10 +407,13 @@
         <img alt="" src="/assets/hilo/win.00419b3e.png" class="bg" />
         <div class="wrap">
           <div class="profit">
-            <div  style="font-size: 1.6rem;" class="sc-Galmp erPQzq coin notranslate">
+            <div
+              style="font-size: 1.6rem;"
+              class="sc-Galmp erPQzq coin notranslate"
+            >
               <img alt="" class="coin-icon" src={gameWinData.token_img} />
               <div class="amount">
-                <span  class="amount-str"
+                <span class="amount-str"
                   >{removeTrailingZeros(gameWinData.profit)}<span class="suffix"
                     >{getSuffix(gameWinData.profit || "")}</span
                   ></span
@@ -536,6 +539,19 @@
     -webkit-box-pack: end;
     justify-content: flex-end;
   }
+  .fIoiVG .empty-item {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    color: rgba(153, 164, 176, 0.6);
+    background-color: rgba(122, 128, 140, 0.15);
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    font-weight: bold;
+    border-radius: 1.375rem;
+  }
   .fIoiVG .recent-item {
     padding: 0px 0.25rem;
     cursor: pointer;
@@ -592,6 +608,13 @@
     position: relative;
     z-index: 2;
   }
+  @media screen and (max-width: 621px) {
+    .fFDbEu .hilo-graph-wrap {
+      width: 100% !important;
+      padding: 0px 1.125rem 1.875rem !important;
+      margin-top: 1.25rem !important;
+    }
+  }
   .fFDbEu .top-box {
     display: flex;
     align-items: flex-start;
@@ -599,6 +622,17 @@
     justify-content: space-between;
     margin-bottom: 2.125rem;
   }
+
+  @media screen and (max-width: 621px) {
+    .fFDbEu .lh-box {
+      width: 6.125rem !important;
+      height: 10.4375rem !important;
+      border-radius: 0.21875rem !important;
+      border-width: 0.08125rem !important;
+      box-shadow: rgb(23, 24, 27) 0px -1.25rem 0px 0px inset !important;
+    }
+  }
+
   .fFDbEu .lh-box {
     width: 9.625rem;
     height: 16.25rem;
@@ -611,7 +645,13 @@
   .fFDbEu .higher .lottie {
     left: 48%;
   }
-
+  @media screen and (max-width: 621px) {
+    .fFDbEu .lottie {
+      width: 21.975rem !important;
+      height: 23.025rem !important;
+      bottom: 1.5rem !important;
+    }
+  }
   .fFDbEu .lottie {
     position: absolute;
     width: 32.9625rem;
@@ -633,10 +673,23 @@
     white-space: nowrap;
     color: rgb(245, 246, 247);
   }
+
+  @media screen and (max-width: 621px) {
+    .fFDbEu .cards-box {
+      padding-top: 0.625rem !important;
+    }
+  }
   .fFDbEu .cards-box {
     position: relative;
     z-index: 2;
     padding-top: 1.25rem;
+  }
+
+  @media screen and (max-width: 621px) {
+    .fFDbEu .cards {
+      width: 5.625rem !important;
+      height: 8.125rem !important;
+    }
   }
 
   .fFDbEu .cards {
@@ -774,6 +827,19 @@
     align-items: center;
     -webkit-box-pack: center;
     justify-content: center;
+  }
+  @media screen and (max-width: 621px) {
+    .fFDbEu .skip-btn {
+      width: 1.5rem !important;
+      height: 1.5rem !important;
+      border-width: 1px !important;
+      right: 50% !important;
+      transform: translateX(3.625rem) !important;
+    }
+    .fFDbEu .cards-box .tips {
+      zoom: 0.6667 !important;
+      white-space: nowrap !important;
+    }
   }
   .fFDbEu .skip-btn:disabled {
     opacity: 0.5;

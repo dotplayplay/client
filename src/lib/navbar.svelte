@@ -2,9 +2,7 @@
   import "../styles/navbar/mobileNavbar.css";
   import AiOutlineSearch from "svelte-icons-pack/ai/AiOutlineSearch";
   import IoWallet from "svelte-icons-pack/io/IoWallet";
-  import BsPlayFill from "svelte-icons-pack/bs/BsPlayFill";
-  import IoNotificationsSharp from "svelte-icons-pack/io/IoNotificationsSharp";
-  import HiSolidMail from "svelte-icons-pack/hi/HiSolidMail";
+  import { chatCounter } from "$lib/store/chat-counter";
   import BsDroplet from "svelte-icons-pack/bs/BsDroplet";
   import AiOutlineMenuUnfold from "svelte-icons-pack/ai/AiOutlineMenuUnfold";
   import "../styles/navbar/navbar.css";
@@ -167,7 +165,9 @@
         <button id="chat" class="sc-eicpiI PGOpB">
           <button on:click={handleChat} class="chat-btn ">
             <Icon src={BsDroplet} size="20" color={"rgba(153, 164, 176, 0.8)"} className="custom-icon" />
-            <div class="sc-fotOHu gGSOuF badge ">99</div>
+            {#if $chatCounter}
+              <div class="sc-fotOHu gGSOuF badge">{$chatCounter}</div>
+            {/if}
           </button>
         </button>
       </div>
@@ -249,7 +249,9 @@
           <div class="right">
             <button on:click={handleChat} id="chat" class="sc-eicpiI PGOpB chat-btn">
               <Icon src={BsDroplet} size="20" color={"rgba(153, 164, 176, 0.8)"} className="custom-icon" />
-              <div class="sc-fotOHu gGSOuF badge ">99</div>
+              {#if $chatCounter}
+                <div class="sc-fotOHu gGSOuF badge">{$chatCounter}</div>
+              {/if}
             </button>
           </div>
       </div>

@@ -78,6 +78,9 @@ export let HandleNextTime = writable(netTile)
 let csout = false
 export let canCashout = writable(csout)
 
+let _liveStats = null;
+export let liveStats = writable(_liveStats);
+
 let skownEl = [{
     id: 1,
     active: false,

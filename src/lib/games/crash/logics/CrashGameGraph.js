@@ -1,9 +1,9 @@
 import pkg from 'lodash';
 const { debounce } = pkg;
-import EventEmitter from "./EventEmitter";
+import EventEmitter from "$lib/logics/EventEmitter";
 import { gsap } from "gsap";
 
-// Game status enum
+  // Game status enum
 const GameStatus = {
   0: 'CONNECTION',
   1: 'STARTING',

@@ -4,11 +4,10 @@
 
 <script>
   const { autorun } = connect();
-  import useFormatter from "./hooks/formatter";
+  import useFormatter from "$lib/hook/formatter";
   const { removeTrailingZeros, getSuffix } = useFormatter();
   import CrashInfoDialog from "./dialogs/GameInfoDialog.svelte";
   import { crashGame } from "./store";
-  import { screen, is_open__Appp, is_open__chat } from "$lib/store/screen";
   import Decimal from "decimal.js";
   $: myBets = [];
   let game = null;
@@ -23,24 +22,6 @@
   }
 
   $: dialogData = null;
-
-  $: newScreen = 0
-  $: {
-    if($is_open__Appp && !$is_open__chat){
-      newScreen = $screen - 240
-    }
-    else if(!$is_open__Appp && $is_open__chat){
-      newScreen = $screen - 432
-    }
-    else if(!$is_open__Appp && !$is_open__chat){
-      newScreen = $screen - 72
-    }
-    else if($is_open__Appp && $is_open__chat){
-      newScreen = $screen - 600
-    }
-  }
-
-
 </script>
 
 {#if Boolean(dialogData)}
@@ -52,20 +33,13 @@
 <div class="sc-eZhRLC iycaRo">
   {#if Boolean(myBets.length)}
     <table class="sc-gWXbKe iUeetX table is-hover">
-      <thead>
-        <tr>
-          <th class="num">Bet ID</th>
-          {#if newScreen > 700}
-            <th class="time">Time</th>
-          {/if}
-          {#if newScreen > 400}
-          <th class="bet">Bet</th>
-          {/if}
-          <th class="payout">Payout</th>
-          <th class="profit">Profit</th>
-        </tr>
-      </thead>
-      <tbody>
+      <thead
+        ><tr
+          ><th class="num">Bet ID</th><th class="time">Time</th><th class="bet"
+            >Bet</th
+          ><th class="payout">Payout</th><th class="profit">Profit</th></tr
+        ></thead
+      ><tbody>
         {#each myBets as bet, index (`${bet.game_id}_${index}_${bet.betID}`)}
           <tr
             on:click={() => {
@@ -82,26 +56,20 @@
                 }}
                 class="hash ellipsis">{bet.betID}</a
               ></td
-            >
-            {#if newScreen > 700}
-            <td>{new Date(bet.betTime).toLocaleTimeString()}</td>
-            {/if}
-            {#if newScreen > 400}
-            <td class="bet">
-              <div class="sc-Galmp erPQzq coin notranslate monospace">
+            ><td>{new Date(bet.betTime).toLocaleTimeString()}</td><td
+              class="bet"
+              ><div class="sc-Galmp erPQzq coin notranslate monospace">
                 <img alt="" class="coin-icon" src={bet.currencyImage} />
                 <div class="amount">
                   <span class="amount-str"
-                    >{removeTrailingZeros(bet.betAmount.toFixed(8))}
-                    <span class="suffix"
-                      >{getSuffix(bet.betAmount.toFixed(8))}</span
+                    >{removeTrailingZeros(bet.betAmount.toFixed(4))}
+                    <span style="margin-left: -3px;" class="suffix"
+                      >{getSuffix(bet.betAmount.toFixed(4))}</span
                     ></span
                   >
                 </div>
-              </div>
-            </td>
-            {/if}
-              <td class="payout">{new Decimal(bet.odds).toDP(2).toNumber()}x</td><td
+              </div></td
+            ><td class="payout">{bet.won ? new Decimal(bet.odds).toDP(2).toNumber() : "0.00"}x</td><td
               class="profitline {bet.won ? 'is-win' : 'is-lose'}"
               ><div class="sc-Galmp erPQzq coin notranslate monospace has-sign">
                 <img alt="" class="coin-icon" src={bet.currencyImage} />
@@ -109,13 +77,13 @@
                   <span class="amount-str"
                     >{bet.won ? "+" : ""}{removeTrailingZeros(
                       bet.won
-                        ? bet.profitAmount.toFixed(8)
-                        : bet.betAmount.toFixed(8)
+                        ? bet.profitAmount.toFixed(4)
+                        : bet.betAmount.toFixed(4)
                     )}<span class="suffix"
                       >{getSuffix(
                         bet.won
-                          ? bet.profitAmount.toFixed(8)
-                          : bet.betAmount.toFixed(8)
+                          ? bet.profitAmount.toFixed(4)
+                          : bet.betAmount.toFixed(4)
                       )}</span
                     ></span
                   >
