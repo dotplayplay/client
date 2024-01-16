@@ -19,8 +19,8 @@ import { onMount } from "svelte";
 import { handleCountdown } from "$lib/games/ClassicDice/socket/index"
 const { handleMinesHistory } = handleCountdown()
 const URL = ServerURl()
-import {useLiveStats} from "$lib/hook/livestats"
-const {recordGame} = useLiveStats(liveStats, "MINES_LIVE_STATS")
+// import {useLiveStats} from "$lib/hook/livestats"
+// const {recordGame} = useLiveStats(liveStats, "MINES_LIVE_STATS")
 
 let max_profit_tips = false
 let Handlemax_profit_tips = ((e)=>{
@@ -332,7 +332,7 @@ const handleCashout = (async()=>{
         Authorization: `Bearer ${$handleAuthToken}`
     }})
     .then((response)=>{
-        recordGame(true, data.bet_amount, data.profit, data.bet_token_img);
+        // recordGame(true, data.bet_amount, data.profit, data.bet_token_img);
         HandleWinningSound()
         Cashout.set(0)
         HandleNextTime.set(0)
