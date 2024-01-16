@@ -328,16 +328,29 @@ const handleSoundState = (()=>{
 
             <div class="game-actions">
                 <button on:click={()=> handleSoundState()} class={`action-item ${$soundHandler ? "active" : ""} `}>
-                    <Icon src={AiFillSound} size="23"  color={` ${$soundHandler ? "rgb(67, 179, 9)" : "rgba(153, 164, 176, 0.6)"} `} title="Sound" />
+                    <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="sc-gsDKAQ hxODWG icon">
+                        <use xlink:href="#icon_SoundOn"></use>
+                    </svg>
                 </button>
-                <button on:click={stats} class="action-item ">
-                    <Icon src={BiStats}  size="18"  color="rgb(153, 164, 176)" />
+                <button class="action-item  active">
+                    <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="sc-gsDKAQ hxODWG icon">
+                        <use xlink:href="#icon_TurboBet"></use>
+                    </svg>
                 </button>
-                <button on:click={hanhisSeed} class="action-item " id="set_seed">
-                    <Icon src={BiSolidAlbum}  size="18"  color="rgb(153, 164, 176)" />
+                <button on:click={stats} class="action-item  ">
+                    <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="sc-gsDKAQ hxODWG icon">
+                        <use xlink:href="#icon_LiveStats"></use>
+                    </svg>
                 </button>
-                <button on:click={handleIsHelp} class="action-item ">
-                    <Icon src={BsHurricane}  size="18"  color="rgb(153, 164, 176)" />
+                <button on:click={hanhisSeed} class="action-item  " id="set_seed">
+                    <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="sc-gsDKAQ hxODWG icon">
+                        <use xlink:href="#icon_Seed"></use>
+                    </svg>
+                </button>
+                <button on:click={handleIsHelp} class="action-item  ">
+                    <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="sc-gsDKAQ hxODWG icon">
+                        <use xlink:href="#icon_Help"></use>
+                    </svg>
                 </button>
             </div>
         </div>
