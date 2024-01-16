@@ -129,12 +129,7 @@ const handleDpojb = (async()=>{
         is_loading = true
         if($handleisLoggin){
             if( $default_Wallet.coin_name !== "USDT" 
-            && $default_Wallet.coin_name !== "TRX" 
-            && $default_Wallet.coin_name !== "BTC"
-            && $default_Wallet.coin_name !== "BNB"
-            && $default_Wallet.coin_name !== "DOGE"
-            && $default_Wallet.coin_name !== "ETH"
-            && $default_Wallet.coin_name !== "LTC"){
+            && $default_Wallet.coin_name !== "PPF" ){
                 error_msg.set("Select another coin")
                 is_loading = false
                 setTimeout(()=>{
