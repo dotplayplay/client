@@ -446,9 +446,18 @@
         flex-direction: column;
         padding: 1.375rem 1.5rem;
     }
-    .page-bonus-item {
-        margin-bottom: 1rem;
-        width: 49%;
+    @media only screen and (max-width:650px){
+        .page-bonus-item {
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+    }
+
+    @media only screen and (min-width:650px){
+        .page-bonus-item {
+            margin-bottom: 1rem;
+            width: 49%;
+        }
     }
     .bonus-item-text {
         position: relative;

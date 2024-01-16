@@ -48,7 +48,7 @@ const openOriginal = ((e) => {
              <Original styls={styls} />
             {/if}
         </button>
-        <button
+        <!-- <button
         on:click={() => goto("/bonus")}
             class={`sc-iNGGcK knLCVT menu-item ${
             routes.route === "/bonus" ? "select" : ""
@@ -63,8 +63,11 @@ const openOriginal = ((e) => {
             title="arror"
           />
         </div>
-      </button>
-        <button on:click={()=> goto("/promotion")} class={`sc-iNGGcK knLCVT menu-item ${routes.route === "/promotion" ? "select" : ""}`}>
+      </button> -->
+        <button     on:click={() => goto("/bonus")}
+            class={`sc-iNGGcK knLCVT menu-item ${
+            routes.route === "/bonus" ? "select" : ""
+            }`}>
             <div class="menu-mobile">
                 <img alt="menu-icon" src="https://static.nanogames.io/assets/promotion.316446ec.png">
             </div>

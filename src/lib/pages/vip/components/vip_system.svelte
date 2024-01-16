@@ -39,7 +39,7 @@
 
     <div class="sc-iLOkMM bHtipE vip-system-list">
 
-        <div on:click={() => (showBronzeCard = !showBronzeCard)} class="vip-system-bar {showBronzeCard ? "expanded" : ""}">
+        <button on:click={() => (showBronzeCard = !showBronzeCard)} class="vip-system-bar {showBronzeCard ? "expanded" : ""}">
             <div class="bar-cont">
                 <img
                     class="level-icon"
@@ -57,7 +57,7 @@
                     title="arror"
                 />
             </button>
-        </div>
+        </button>
 
         {#if showBronzeCard}
             <div transition:slide={{ duration: 300 }} class="sc-hKwDye fclMSM v-toggle-view">
@@ -663,7 +663,7 @@
     </div>
 
     <div class="sc-iLOkMM bHtipE vip-system-list">
-        <div on:click={() => (showSilverCard = !showSilverCard)} class="vip-system-bar {showSilverCard ? "expanded" : ""}">
+        <button on:click={() => (showSilverCard = !showSilverCard)} class="vip-system-bar {showSilverCard ? "expanded" : ""}">
             <div class="bar-cont">
                 <img
                     class="level-icon"
@@ -681,7 +681,7 @@
                     title="arror"
                 />
             </button>
-        </div>
+        </button>
 
         {#if showSilverCard}
             <div transition:slide={{ duration: 400 }} class="sc-hKwDye fclMSM v-toggle-view" style="height: auto;">
@@ -1851,7 +1851,7 @@
     </div>
 
     <div class="sc-iLOkMM bHtipE vip-system-list">
-        <div on:click={() => (showGoldCard = !showGoldCard)} class="vip-system-bar  {showGoldCard ? "expanded" : ""}">
+        <button on:click={() => (showGoldCard = !showGoldCard)} class="vip-system-bar  {showGoldCard ? "expanded" : ""}">
             <div class="bar-cont">
                 <img
                     class="level-icon"
@@ -1869,7 +1869,7 @@
                     title="arror"
                 />
             </button>
-        </div>
+        </button>
         {#if showGoldCard}
             <div transition:slide={{ duration: 600 }} class="sc-hKwDye fclMSM v-toggle-view" style="height: auto;">
                 <div class="v-table-wrap">
@@ -3135,7 +3135,7 @@
     </div>
 
     <div class="sc-iLOkMM bHtipE vip-system-list">
-        <div on:click={() => (showPlatinumCard = !showPlatinumCard)} class="vip-system-bar {showPlatinumCard ? "expanded" : ""}">
+        <button on:click={() => (showPlatinumCard = !showPlatinumCard)} class="vip-system-bar {showPlatinumCard ? "expanded" : ""}">
             <div class="bar-cont">
                 <img
                     class="level-icon"
@@ -3153,7 +3153,7 @@
                     title="arror"
                 />
             </button>
-        </div>
+        </button>
 
         {#if showPlatinumCard}
             <div transition:slide={{ duration: 800 }} class="sc-hKwDye fclMSM v-toggle-view" style="height: auto;">
@@ -5429,7 +5429,7 @@
     </div>
 
     <div class="sc-iLOkMM bHtipE vip-system-list">
-        <div on:click={() => (showDiamondCard = !showDiamondCard)} class="vip-system-bar {showDiamondCard ? "expanded" : ""}">
+        <button on:click={() => (showDiamondCard = !showDiamondCard)} class="vip-system-bar {showDiamondCard ? "expanded" : ""}">
             <div class="bar-cont">
                 <img
                     class="level-icon"
@@ -5453,7 +5453,7 @@
                     title="arror"
                 />
             </button>
-        </div>
+        </button>
 
         {#if showDiamondCard}
             <div transition:slide={{ duration: 900 }} class="sc-hKwDye fclMSM v-toggle-view" style="height: auto;">
@@ -7851,7 +7851,22 @@
         position: relative;
         margin: 0px 0.75rem 0.625rem;
     }
-
+    .flex-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .fPtvsS {
+        text-align: left;
+        white-space: nowrap;
+        font-size: 0px;
+    }
+    .fPtvsS .img-star {
+        width: auto;
+        height: 1.0625rem;
+        margin-right: 2px;
+        object-fit: cover;
+    }
     .bHtipE .vip-system-bar {
         position: relative;
         display: flex;
@@ -7861,6 +7876,7 @@
         justify-content: space-between;
         height: 3rem;
         line-height: 3rem;
+        width:100%;
         cursor: pointer;
     }
 

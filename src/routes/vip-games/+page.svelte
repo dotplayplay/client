@@ -6,28 +6,8 @@
     let vip = true
 </script>
 
-{#if vip}
-<div class="sc-lhMiDA ePAxUv">
-    <div class="sc-eCImPb cuPxwd empty full-abs">
-        <img src="https://static.nanogames.io/assets/empty.acd1f5fe.png" alt="">
-        <div class="msg">VIP management is not ready yet </div>
-    </div>
-</div>
-{:else}
-<div class="sc-lhMiDA ePAxUv">
-    <div class="vip-main-page">
-        <Main />
-    </div>
-    <div class="vip-mobile-page">
-        <Mobile />
-    </div>
-</div>
-{/if}
 
 
+<Main />
 
-<style>
-.vip-mobile-page{
-    display: none;
-}
-</style>
+<Mobile />

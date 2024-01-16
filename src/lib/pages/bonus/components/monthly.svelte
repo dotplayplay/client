@@ -96,11 +96,11 @@
             <div class="t1vk7zf8 tips-wrap">
                 <div class="in">
                     <button>
-                        <svg class="s1ff97qc icon">
+                        <!-- <svg class="s1ff97qc icon">
                             <use
                                 xlink:href="/assets/symbol-defs.ac3d71f1.svg#icon_Help"
                             ></use>
-                        </svg>
+                        </svg> -->
                     </button>
                 </div>
             </div>
@@ -221,10 +221,20 @@
         flex-direction: column;
         padding: 1.375rem 1.5rem;
     }
-    .page-bonus-item {
-        margin-bottom: 1rem;
-        width: 49%;
+    @media only screen and (max-width:650px){
+        .page-bonus-item {
+            margin-bottom: 1rem;
+            width: 100%;
+        }
     }
+
+    @media only screen and (min-width:650px){
+        .page-bonus-item {
+            margin-bottom: 1rem;
+            width: 49%;
+        }
+    }
+
     .quests-btn.claim {
         background: var(--primary-color);
         color: var(--autofill-color);
@@ -377,18 +387,10 @@
         font-size: 14px;
         font-weight: bold;
     }
-    .s1ff97qc {
-        width: 1.4em;
-        height: 1.4em;
-        fill: var(--1nfs066);
-    }
     .b2i2902 .bonus-btn {
         position: relative;
         z-index: 2;
         margin-top: auto;
-    }
-    p {
-        margin: 0;
     }
     .b2i2902 .bonus-item-text .bonus-desc.last {
         margin-top: 0.5rem;

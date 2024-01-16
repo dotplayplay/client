@@ -3,14 +3,8 @@ import Icon from 'svelte-icons-pack/Icon.svelte';
 import RiSystemArrowRightSLine from "svelte-icons-pack/ri/RiSystemArrowRightSLine";
 import VipLevel from '../components/vipLevel.svelte'; 
 import Vipcards from '../components/Vipcards.svelte';
-import { UserProfileEl } from "$lib/index"
-const { handleprofile } = UserProfileEl()
-import { onMount } from "svelte"
-import {vipProfiile } from "../vipstore"
-let is_about = false
-const handleIsAbout = (()=>{
-    is_about = !is_about
-})
+import { vipProfiile } from "$lib/store/profile";
+$: is_about = false
 
 let is_cards = false
 const handleVIPCARDS = (()=>{
@@ -21,10 +15,6 @@ let unit_range = (212993000 - 0) / 100
 let range = (parseFloat($vipProfiile.total_wagered) - 0).toFixed(0)
 let progressPercent = (range / unit_range).toFixed(0)
 
-onMount(async()=>{
-    const result = await handleprofile()
-    vipProfiile.set(result)
-})
 
 
 </script>
@@ -32,11 +22,11 @@ onMount(async()=>{
 <div class="vip-user-panel">
 
     {#if is_about}
-    <VipLevel on:close={handleIsAbout} />
+        <VipLevel on:close={()=> is_about = false} />
     {/if}
 
     {#if is_cards}
-    <Vipcards on:close={handleVIPCARDS} />
+        <Vipcards on:close={handleVIPCARDS} />
     {/if}
    
 
@@ -168,14 +158,14 @@ onMount(async()=>{
                     </div>
                 </div>
             </div>
-            <button on:click={handleIsAbout} class="about-level-btn">
+            <button on:click={()=> is_about = true} class="about-level-btn">
                 About VIP Level
                 <Icon src={RiSystemArrowRightSLine}  size="25"  color="rgb(67, 179, 9)" className="custom-icon"/>
             </button>
         </div>
 
 
-        <button on:click={handleIsAbout}  class="level-big-wrap">
+        <button on:click={()=> is_about = true}  class="level-big-wrap">
             <div class="tran-wrap" style="transform: scale(0.849902);">
                 <div class="level-cl-wrap">
                     <div class="level-cont">
@@ -258,6 +248,8 @@ onMount(async()=>{
 
     </div>
 </div>
+
+
 <div class="banner-cont-w">
     <div class="level-cont cont-l cont-margin">
         <div class="level-sub-tit">Why Upgrade To SVIP?</div>
@@ -265,8 +257,8 @@ onMount(async()=>{
     </div>
     <div class="level-cont cont-r cont-margin">
         <div class="level-sub-tit">Upgrade Your VIP Level</div>
-        <div class="level-sub-desc">As a NANOGAMES.IO VIP Club member, you get exclusive access to generous rewards and personalized gifts, but that’s not all. The more you play, the better luxury benefits you’ll receive as you rise through the VIP ranks to become an Elite VIP member where there are no limits to the custom tailored VIP perks NANOGAMES.IO will shower you with.</div>
-        <button on:click={handleIsAbout}  class="sc-iqseJM sc-egiyK cBmlor fnKcEH button button-normal level-btn-detail">
+        <div class="level-sub-desc">As a DOTPLAYPLAY VIP Club member, you get exclusive access to generous rewards and personalized gifts, but that’s not all. The more you play, the better luxury benefits you’ll receive as you rise through the VIP ranks to become an Elite VIP member where there are no limits to the custom tailored VIP perks NANOGAMES.IO will shower you with.</div>
+        <button on:click={()=> is_about = true}  class="sc-iqseJM sc-egiyK cBmlor fnKcEH button button-normal level-btn-detail">
             <div class="button-inner">Details</div>
         </button>
     </div>

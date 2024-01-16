@@ -64,29 +64,21 @@ const handeTheme = ((e) => {
         </button>
    <button
       on:click={() => goto("/bonus")}
-      class={`sc-iNGGcK knLCVT menu-item  ${
+      class={`sc-iNGGcK knLCVT menu-item special-nav  ${
         routes.route === "/bonus" ? "select" : ""
       } `}
     >
       <div class="menu-pc">
-        <span style="padding: 10px">
-          <Icon
-            src={AiFillGift}
-            size="25"
-            color="rgb(67, 179, 9)"
-            className="custom-icon"
-            title="arror"
-          />
-        </span>
+        <img alt="menu-icon" src="https://static.nanogames.io/assets/promotion.316446ec.png">
         <span>Bonus</span>
       </div>
     </button>
-        <button on:click={()=> goto("/promotion")} class={`sc-iNGGcK knLCVT menu-item special-nav  ${routes.route === "/promotion" ? "select" : ""} `}>
+        <!-- <button on:click={()=> goto("/promotion")} class={`sc-iNGGcK knLCVT menu-item special-nav  ${routes.route === "/promotion" ? "select" : ""} `}>
             <div class="menu-pc">
                 <img alt="menu-icon" src="https://static.nanogames.io/assets/promotion.316446ec.png">
                 <span style={`color:${routes.route === "/promotion" ? `#ffff;` : ""}`}>Promotions</span>
             </div>
-        </button>
+        </button> -->
         <button  on:click={()=> goto("/lottery")}  class={`sc-iNGGcK knLCVT menu-item ${ routes.route === "/lottery" ? "select" : ""} `}>
             <div class="menu-pc">
                 <img alt="menu-icon" src="https://static.nanogames.io/assets/lottery.bc95b607.png">

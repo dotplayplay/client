@@ -4,12 +4,13 @@ import "../../styles/bonus/index.css"
 import Bonus from "$lib/mobile/pages/bonus.svelte";
 import Mainbonus from "$lib/pages/bonus/Mainbonus.svelte";
 import { handleisLoggin } from "$lib/store/profile";
+import { screen, is_open__Appp, is_open__chat } from "$lib/store/screen"
 
 </script>
 
 
 {#if !$handleisLoggin}
-<div id="main" class="b1rxc92l page-max-width-wrap width-stage-2">
+<div id="main-screen" style={`padding-left:${$screen < 650 ? 0 : $is_open__Appp ? 52 : 72}px; padding-right:${$is_open__chat ? 366 : 15}px`} class="b1rxc92l page-max-width-wrap width-stage-2">
     <div class="tsxsoob top-page-wrap">
         <div class="left-text-wrap">
             <h2 class="ttu">Unlock <span>endless</span> benefits</h2>
@@ -228,9 +229,3 @@ import { handleisLoggin } from "$lib/store/profile";
 {:else}
     <Mainbonus />
 {/if}
-
-
-
-<div class="mobile">
-    <Bonus />
-</div>

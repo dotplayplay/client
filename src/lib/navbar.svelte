@@ -144,8 +144,8 @@
         </div>
         <div class="sc-gnnDb fWkueO">
           <div class="user-wrap">
-            <a href={`/user/profile/${$profileStore.user_id}`}>
-              <img class="avatar " alt="" src={$profileStore.profile_image}>
+            <a href={`/user/profile/${$profileStore.user_id && $profileStore.user_id}`}>
+              <img class="avatar " alt="" src={$profileStore.profile_image && $profileStore.profile_image}>
             </a>
             <button on:mouseenter={()=> profileNAV = true} on:mouseleave={()=> profileNAV = false} class="svg">
               <Icon src={AiOutlineMenuUnfold} size="23" color={"rgba(153, 164, 176, 0.8)"} className="custom-icon" />

@@ -1,6 +1,7 @@
 import { browser } from '$app/environment'
 import { profileStore, handleisLoading, handleisLoggin, app_Loading } from "$lib/store/profile";
-import { default_Wallet, usdt_Wallet, ppfWallet,ppdWallet,ppeWallet, pplWallet, coin_list } from "../lib/store/coins"
+import { default_Wallet, coin_list } from "../lib/store/coins"
+import { vipProfiile } from "$lib/store/profile";
 import { ServerURl } from "$lib/backendUrl"
 const URL = ServerURl()
 
@@ -28,6 +29,7 @@ const handleprofile = async (auth) => {
             }
             if (response.ok) {
                 profileStore.set(json.users[0])
+                vipProfiile.set(json.users[0])
                 app_Loading.set(false)
                 handleisLoggin.set(true)
                 let wallet = json.wallet

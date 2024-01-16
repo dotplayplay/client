@@ -14,12 +14,13 @@
   import CoinTip from "./components/Coin-tip.svelte";
   import HitBingo from "./components/hit-bingo.svelte";
   import { handleAuthToken } from "$lib/store/routes";
+  import { screen, is_open__Appp, is_open__chat } from "$lib/store/screen"
   import axios from "axios";
   import { ServerURl } from "$lib/backendUrl";
   import { onMount } from "svelte";
   let url = ServerURl();
 
-  // $: console.log($allcashback)
+  // $: console.log($is_open__Appp)
   const handleAllcashbacks = async () => {
     const { data } = await axios.get(`${url}/api/cashback`, {
       headers: {
@@ -34,7 +35,7 @@
   });
 </script>
 
-<div class="b1jlld01 page-bonus-wrap page-max-width-wrap">
+<div class="b1jlld01 page-bonus-wrap page-max-width-wrap" style={`padding-left:${ $screen < 650 ? 0 : $is_open__Appp ? 52 : 22}px; padding-right:${$is_open__chat ? 366 : 15}px`}>
   {#if $error_msg}
     <div class="error-message">
       <div class="hTTvsjh">
@@ -46,7 +47,9 @@
   <div class="b1vu4hmp">
     <div class="b1w3idi2">
       <div class="dashboard-left">
-        <img alt="img" src="https://bc.game/assets/money.7fa4e398.png" />
+        {#if $screen > 650}
+          <img alt="img" src="https://bc.game/assets/money.7fa4e398.png" />
+        {/if}
         <div class="left-text-wrap">
           <div class="total-text"><p>Total Bonus Claimed</p></div>
           <p class="usd-cs-amount n">
@@ -84,9 +87,12 @@
           <span class="at">0.00</span>
         </p>
       </div>
+      {#if $screen > 650}
       <button class="ui-button button-normal c-btn">
         <div class="button-inner">Details</div>
       </button>
+    {/if}
+    
     </div>
   </div>
 

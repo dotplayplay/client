@@ -28,7 +28,7 @@
   import { handleCountdown } from "$lib/games/ClassicDice/socket/index";
   const { handleChattingMessages, handleGrabCoinDrop } = handleCountdown();
   import { chats } from "$lib/chat-room/store/index";
-  import { ServerURl } from "../backendUrl";
+  import { ServerURl } from "$lib/backendUrl";
   import Mobile from "./mobile.svelte";
   import { region } from "$lib/store/region";
   import { coin_list, default_Wallet } from "$lib/store/coins";
@@ -41,7 +41,7 @@
   let showRegion = false;
   let showTopWinner = false;
   let URL = ServerURl();
-  let defaultUsername = [
+  $: defaultUsername = [
     {
       vip_level: 3,
       username: "wXjdkVjtm",
@@ -99,7 +99,7 @@
       chats.set(res.data);
     });
     await axios.get(`${URL}/api/users/mention-user`).then((res) => {
-      defaultUsername = res.data;
+      // defaultUsername = res.data;
     });
   });
 

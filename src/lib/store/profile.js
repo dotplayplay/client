@@ -6,7 +6,8 @@ let first_loadEl = false
 let app_loadingEl = true
 let procress = 0
 
-
+let uivf = {}
+export const vipProfiile = writable(uivf)
 export let profileStore = writable(profile)
 export let proressbar = writable(procress)
 export let handleisLoggin = writable(isLoggin)

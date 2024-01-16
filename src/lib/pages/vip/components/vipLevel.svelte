@@ -2,7 +2,7 @@
     import Icon from "svelte-icons-pack/Icon.svelte";
     import IoCloseSharp from "svelte-icons-pack/io/IoCloseSharp";
     import VipSystem from "./vip_system.svelte";
-    import { vipProfiile } from "../vipstore";
+    import { vipProfiile } from "$lib/store/profile";
     import { createEventDispatcher, onMount } from "svelte";
     const dispatch = createEventDispatcher();
 
@@ -48,7 +48,7 @@
         const upperLimitIndex = (milestones[milestoneIndex] !== vipLevel && milestones.findIndex(m => vipLevel < m )) || milestoneIndex;
         const percentageOffset = milestoneIndex !== upperLimitIndex ? (((vipLevel - milestones[milestoneIndex]) / (milestones[upperLimitIndex] - milestones[milestoneIndex]) * 100) / milestones.length) : 0;
         progressPercent = Math.max(0, Math.floor((milestoneIndex/(milestones.length - 1) * 100) + percentageOffset) - 3.2); // - 3.2 offset centering
-        console.log('Percentage ', progressPercent, milestoneIndex)
+        // console.log('Percentage ', progressPercent, milestoneIndex)
     }
     
 
@@ -70,7 +70,7 @@
     };
     let timeout;
     const handleScroll = () => {
-        console.log('Scroll ', scrollContainer.offsetLeft, scrollContainer.scrollLeft)
+        // console.log('Scroll ', scrollContainer.offsetLeft, scrollContainer.scrollLeft)
         if (timeout) clearTimeout(timeout);
         timeout = setTimeout(() => {
             scrollLeft = scrollContainer.scrollLeft;
@@ -153,7 +153,7 @@
                             alt=""
                         />
                     </div>
-                    <div
+                    <button
                         style="z-index: 60;"
                         on:click={handleScrollLeft}
                         class="tag t-left {scrollLeft === 0 ? 'disabled' : ''}"
@@ -167,14 +167,11 @@
                             class="hover-img"
                             src="https://static.nanogames.io/assets/black_hover.5b276789.svg"
                         />
-                    </div>
-                    <div
+                    </button>
+                    <button
                         style="z-index: 60;"
                         on:click={handleScrollRight}
-                        class="tag t-right {scrollLeft >= 379
-                            ? 'disabled'
-                            : ''}"
-                    >
+                        class="tag t-right {scrollLeft >= 379 ? 'disabled': ''}" >
                         <img
                             alt=""
                             class="tag-img"
@@ -184,7 +181,7 @@
                             class="hover-img"
                             src="https://static.nanogames.io/assets/black_hover.5b276789.svg"
                         />
-                    </div>
+                    </button>
                     <div
                         on:scroll={handleScroll}
                         bind:this={scrollContainer}
