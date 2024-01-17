@@ -18,10 +18,9 @@
   $: isFocused = false;
   $: sliderOpened = false;
 
-  $: bet_amount = 0;
+  $: bet_amount = 100;
   $: usd = 0;
-  $: betRange = { min: 100, max: 1000 };
-
+  $: betRange = { min: 100, max: 5000 };
   $: slider = null;
 
   $: coin_image =

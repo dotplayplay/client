@@ -158,7 +158,7 @@
         class="recent-list"
         style="width: 112.5%; transform: translate(0%, 0px);"
       >
-        {#each $userBets.slice(0, 10).reverse() as bet (bet.bet_id)}
+        {#each $userBets.slice(0, 10).reverse() as bet}
           <div class="recent-item" style="width: 11.1111%;">
             <div class="item-wrap {bet.won ? 'is-win' : 'is-lose'}">
               {bet.payout.toFixed(2)}x
