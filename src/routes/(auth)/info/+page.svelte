@@ -111,7 +111,9 @@ const handleSubmit = (async() => {
                 username: username,
                 vip_level: $profileStore.vip_level
             }
-         await  axios.post(`${URL}/api/profile/update-user`, {data},
+         await  axios.post(`${URL}/api/profile/update-user`, {
+            data
+        },
          {
             headers: {
             "Content-type": "application/json",

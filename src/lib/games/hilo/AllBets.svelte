@@ -1,4 +1,5 @@
 <script>
+    import { screen } from "$lib/store/screen";
   import { initializing, recentBets } from "$lib/games/hilo/store";
   import Loader from "$lib/components/loader.svelte";
   import HiloDialog from "./dialogs/HiloDialog.svelte";
@@ -12,15 +13,20 @@
 {:else if Boolean($recentBets.length)}
   <div class="sc-eZhRLC iycaRo">
     <table class="sc-gWXbKe iUeetX table is-hover">
-      <thead
-        ><tr
-          ><th class="num">Bet ID</th><th class="user">Player</th><th
-            class="time">Time</th
-          ><th class="bet">Bet</th><th class="payout">Payout</th><th
-            class="profit">Profit</th
-          ></tr
-        ></thead
-      ><tbody>
+      <thead>
+        <tr>
+          <th class="num">Bet ID</th><th class="user">Player</th>
+          {#if $screen > 650}
+            <th class="time">Time</th>
+          {/if}
+          {#if $screen > 420}
+          <th class="bet">Bet</th>
+          {/if}
+          <th class="payout">Payout</th>
+          <th class="profit">Profit</th>
+          </tr>
+        </thead>
+        <tbody>
         {#each $recentBets as bet, index (`${bet.bet_id}_${index}`)}
           <tr on:click={() => (hiloDialogData = { tab: 1, betID: bet.bet_id })}
             ><td><a href="/hilo" class="hash ellipsis">{bet.bet_id}</a></td><td
@@ -43,19 +49,28 @@
                   {/if}
                 </div></a
               ></td
-            ><td>{new Date(bet.time).toLocaleTimeString()}</td><td class="bet"
-              ><div class="sc-Galmp erPQzq coin notranslate monospace">
+            >
+            {#if $screen > 650}
+              <td>{new Date(bet.time).toLocaleTimeString()}</td>
+            {/if}
+
+            {#if $screen > 420}
+            <td class="bet">
+              <div class="sc-Galmp erPQzq coin notranslate monospace">
                 <img alt="" class="coin-icon" src={bet.token_img} />
                 <div class="amount">
                   <span class="amount-str"
-                    >{removeTrailingZeros(bet.bet_amount.toFixed(6))}<span
+                    >{removeTrailingZeros(bet.bet_amount.toFixed(7))}<span
                       class="suffix"
-                      >{getSuffix(bet.bet_amount.toFixed(6))}</span
+                      >{getSuffix(bet.bet_amount.toFixed(7))}</span
                     ></span
                   >
                 </div>
-              </div></td
-            ><td class="payout">{bet.payout.toFixed(2)}×</td><td
+              </div>
+            </td>
+            {/if}
+
+              <td class="payout">{bet.payout.toFixed(2)}×</td><td
               class="profitline {!bet.won ? 'is-lose' : 'is-win'}"
               ><div class="sc-Galmp erPQzq coin notranslate monospace has-sign">
                 <img alt="" class="coin-icon" src={bet.token_img} />

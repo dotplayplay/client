@@ -1,5 +1,6 @@
 <script>
   import { fly } from "svelte/transition";
+  import { screen } from "$lib/store/screen";
   import { cubicOut } from "svelte/easing";
   import GameDetails from "./components/GameDetails.svelte";
   import SeedSettings from "./components/SeedSettings.svelte";
@@ -19,7 +20,7 @@
   <div class="sc-bkkeKt kBjSXI" style="opacity: 1;">
     <div
       class="dialog"
-      style="opacity: 1; width: 464px; height: 582px; margin-top: -291px; margin-left: -232px; transform: scale(1) translateZ(0px);"
+      style={`${$screen < 650 ? "transform: scale(1) translateZ(0px);" : "opacity: 1; width: 464px; height: 631px; margin-top: -315.5px; margin-left: -232px;"}  `}
     >
       {#if launchConf.tab === 1 && currentTab !== 1}
         <button
@@ -105,28 +106,7 @@
   .dialog-head.has-back {
     margin-left: 3.125rem;
   }
-  .kBjSXI {
-    position: fixed;
-    z-index: 1000;
-    inset: 0px;
-    background-color: rgba(0, 0, 0, 0.7);
-    filter: none !important;
-  }
-  .dialog {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    left: 50%;
-    top: 50%;
-    width: 464px;
-    height: 720px;
-    margin: -375px 0px 0px -280px;
-    transition-property: width, height, margin-left, margin-top;
-    transition-duration: 0.5s;
-    border-radius: 1.25rem;
-    overflow: hidden;
-    background-color: rgb(23, 24, 27);
-  }
+
   .dialog-head.has-close {
     margin-right: 3.75rem;
   }
@@ -169,28 +149,7 @@
     align-items: center;
     color: rgb(245, 246, 247);
   }
-  .fLASqZ {
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    z-index: 11;
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    justify-content: center;
-    width: 3.75rem;
-    height: 3.75rem;
-  }
-  .fLASqZ:hover svg {
-    transform: rotate(-90deg);
-    fill: rgb(245, 246, 247);
-  }
-  .fLASqZ svg {
-    transition: transform 0.5s cubic-bezier(0.36, 0.66, 0.04, 1) 0s;
-    cursor: pointer;
-    font-size: 0.75rem;
-  }
+
   .hxODWG {
     width: 1.4em;
     height: 1.4em;

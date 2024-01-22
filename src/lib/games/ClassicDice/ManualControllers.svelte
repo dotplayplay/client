@@ -1,75 +1,83 @@
 <script>
-  import { default_Wallet } from "$lib/store/coins";
-  import Icon from "svelte-icons-pack/Icon.svelte";
-  import RiSystemArrowUpSLine from "svelte-icons-pack/ri/RiSystemArrowUpSLine";
-  import RiSystemArrowDownSLine from "svelte-icons-pack/ri/RiSystemArrowDownSLine";
-  import BsExclamationCircle from "svelte-icons-pack/bs/BsExclamationCircle";
-  import { payout, isbetLoadingBtn, betPosition,rollunder, Handles_Loading} from "./store";
-  import { profileStore, handleisLoggin } from "$lib/store/profile";
-  import { dice_history } from "../ClassicDice/store/index";
-  import { error_msg } from "./store/index";
-  import { ServerURl } from "$lib/backendUrl";
-  import { onMount } from "svelte";
-  import { handleCountdown } from "../ClassicDice/socket/index";
-  const { handleDicebet } = handleCountdown();
-  import { DiceEncription } from "$lib/games/ClassicDice/store/index";
-  const URL = ServerURl();
-  import { soundHandler } from "../../games/ClassicDice/store/index";
-  import cr from "./audio/click.wav";
-  import win from "./audio/mixkit-achievement-bell-600.wav";
+import { default_Wallet } from "$lib/store/coins";
+import Icon from "svelte-icons-pack/Icon.svelte";
+import RiSystemArrowUpSLine from "svelte-icons-pack/ri/RiSystemArrowUpSLine";
+import RiSystemArrowDownSLine from "svelte-icons-pack/ri/RiSystemArrowDownSLine";
+import BsExclamationCircle from "svelte-icons-pack/bs/BsExclamationCircle";
+import { payout, isbetLoadingBtn, betPosition,rollunder, Handles_Loading} from "./store";
+import { profileStore, handleisLoggin } from "$lib/store/profile";
+import { handleAuthToken } from "$lib/store/routes"
+import { dice_history } from "../ClassicDice/store/index";
+import { error_msg } from "./store/index";
+import { soundManager } from "$lib/games/ClassicDice/store/index";
+import { onMount } from "svelte";
+import { DiceBet } from "../ClassicDice/hook/manualEngine";
+import { DiceEncription } from "$lib/games/ClassicDice/store/index";
+import { soundHandler } from "$lib/games/ClassicDice/store/index";
 
-  let max_profit_tips = false;
-  let Handlemax_profit_tips = (e) => {
-    if (e === 1) {
-      max_profit_tips = true;
-    } else {
-      max_profit_tips = false;
-    }
-  };
+$: default_coins = "https://res.cloudinary.com/dxwhz3r81/image/upload/v1697828376/ppf_logo_ntrqwg.png"
+$: bet_amount = 0
 
-  let wining_amount = "";
-  let bet_amount;
-  onMount(() => {
+let max_profit_tips = false;
+let Handlemax_profit_tips = (e) => {
+  if (e === 1) {
+    max_profit_tips = true;
+  } else {
+    max_profit_tips = false;
+  }
+};
+
+$: wining_amount = "";
+onMount(() => {
     if ($default_Wallet.coin_name === "USDT") {
       bet_amount = (0.2).toFixed(4);
     } else {
       bet_amount = (100).toFixed(4);
     }
-  });
+});
 
-  $: {
-    wining_amount = (bet_amount * $payout).toFixed(4);
+$: {
+  wining_amount = (bet_amount * $payout).toFixed(4);
+}
+
+const dive = (sign) => {
+  bet_amount = (bet_amount / 2).toFixed(4);
+  if ($default_Wallet.coin_name === "USDT" && bet_amount < 0.1) {
+    bet_amount = (0.1).toFixed(4);
   }
-
-  const dive = () => {
-    bet_amount = (bet_amount / 2).toFixed(4);
-  };
+  if ($default_Wallet.coin_name === "PPF" && bet_amount < 100) {
+    bet_amount = (100).toFixed(4);
+  }
+  if ($default_Wallet.coin_name === "USDT" && bet_amount > 2000) {
+    bet_amount = (2000).toFixed(4);
+  }
+  if ($default_Wallet.coin_name === "PPF" && bet_amount > 10000) {
+    bet_amount = (10000).toFixed(4);
+  }
+};
 
   const mult = () => {
     bet_amount = (bet_amount * 2).toFixed(4);
-  };
-
-  function playSound(e) {
-    if (e === 1) {
-      const audio = new Audio(cr);
-      audio.volume = 0.05;
-      audio.play();
-    } else {
-      const audio = new Audio(win);
-      audio.volume = 0.05;
-      audio.play();
+    if ($default_Wallet.coin_name === "USDT" && bet_amount < 0.1) {
+      bet_amount = (0.1).toFixed(4);
     }
-  }
-  $: history = []
-  $: {
-    history = [...$dice_history];
-  }
+    if ($default_Wallet.coin_name === "PPF" && bet_amount < 100) {
+      bet_amount = (100).toFixed(4);
+    }
+    if ($default_Wallet.coin_name === "USDT" && bet_amount > 2000) {
+      bet_amount = (2000).toFixed(4);
+    }
+    if ($default_Wallet.coin_name === "PPF" && bet_amount > 10000) {
+      bet_amount = (10000).toFixed(4);
+    }
+  };
 
 
   $: non = 0;
   const handleRollSubmit = async () => {
-    // if(browser && window.navigator.onLine){
-    $soundHandler && playSound(1);
+    let sound = $soundManager.audioMap.bet
+    let winSound = $soundManager.audioMap.win
+     $soundManager.Play(sound, $soundHandler);
     Handles_Loading.set(true);
     if ($handleisLoggin) {
       if (parseFloat(bet_amount) > parseFloat($default_Wallet.balance)) {
@@ -78,19 +86,13 @@
         setTimeout(() => {
           error_msg.set("");
         }, 4000);
-      } else if (
-        parseFloat(bet_amount) > 5000 &&
-        $default_Wallet.coin_name === "USDT"
-      ) {
+      } else if ( parseFloat(bet_amount) > 5000 &&  $default_Wallet.coin_name === "USDT") {
         error_msg.set("Maximum bet amount for USDT is 5,000");
         Handles_Loading.set(false);
         setTimeout(() => {
           error_msg.set("");
         }, 4000);
-      } else if (
-        parseFloat(bet_amount) > 10000 &&
-        $default_Wallet.coin_name === "PPF"
-      ) {
+      } else if ( parseFloat(bet_amount) > 10000 && $default_Wallet.coin_name === "PPF") {
         error_msg.set("Maximum bet amount for PPF is 10,000");
         Handles_Loading.set(false);
         setTimeout(() => {
@@ -138,10 +140,11 @@
         };
         isbetLoadingBtn.set(true);
         non += 1;
-        handleDicebet(data);
-        setTimeout(() => {
-          Handles_Loading.set(false);
-        }, 500);
+      const respnse = await DiceBet(data, $handleAuthToken)
+      if(respnse.has_won){
+        $soundManager.Play(winSound, $soundHandler);
+      }
+      dice_history.set([...$dice_history, respnse])
       }
     } else {
       error_msg.set("You are not Logged in");
@@ -150,13 +153,6 @@
         error_msg.set("");
       }, 4000);
     }
-    // }else{
-    //     error_msg.set('Error in network connection')
-    //          Handles_Loading.set(false)
-    //         setTimeout(()=>{
-    //             error_msg.set('')
-    //     },4000)
-    // }
   };
 
   let is_min_max = false;
@@ -210,9 +206,7 @@
     </div>
   {/if}
   <div class="sc-juEPzu lgTgT">
-    <div
-      class="sc-ezbkAF gcQjQT input sc-fvxzrP gOLODp sc-gsFzgR fCSgTW game-coininput"
-    >
+    <div class="sc-ezbkAF gcQjQT input sc-fvxzrP gOLODp sc-gsFzgR fCSgTW game-coininput">
       <div class="input-label">
         <div class="sc-hmvnCu efWjNZ label">
           <div>Amount</div>
@@ -220,8 +214,7 @@
             <button
               on:mouseleave={() => Handlemax_profit_tips(2)}
               on:mouseenter={() => Handlemax_profit_tips(1)}
-              class="sc-gsDKAQ hxODWG icon"
-            >
+              class="sc-gsDKAQ hxODWG icon" >
               <Icon
                 src={BsExclamationCircle}
                 size="15"
@@ -247,15 +240,7 @@
       </div>
       <div class="input-control">
         <input type="number" bind:value={bet_amount} />
-        {#if $handleisLoggin}
-          <img class="coin-icon" alt="" src={$default_Wallet.coin_image} />
-        {:else}
-          <img
-            class="coin-icon"
-            alt=""
-            src="https://nanogames.io/coin/BTC.black.png"
-          />
-        {/if}
+          <img class="coin-icon" alt="" src={ $handleisLoggin ? $default_Wallet.coin_image : default_coins} />
         <div class="sc-kDTinF bswIvI button-group">
           <button on:click={() => dive()}>/2</button>
           <button on:click={() => mult()}>x2</button>
@@ -292,12 +277,12 @@
           <button on:click={handleMinMax} class="sc-cAhXWc cMPLfC">
             <Icon
               src={RiSystemArrowUpSLine}
-              size="80"
+              size="20"
               color="rgba(153, 164, 176, 0.6)"
             />
             <Icon
               src={RiSystemArrowDownSLine}
-              size="80"
+              size="20"
               color="rgba(153, 164, 176, 0.6)"
             />
           </button>
@@ -311,15 +296,7 @@
       </div>
       <div class="input-control">
         <input type="number" disabled bind:value={wining_amount} />
-        {#if $handleisLoggin}
-          <img class="coin-icon" alt="" src={$default_Wallet.coin_image} />
-        {:else}
-          <img
-            class="coin-icon"
-            alt=""
-            src="https://nanogames.io/coin/BTC.black.png"
-          />
-        {/if}
+        <img class="coin-icon" alt="" src={ $handleisLoggin ? $default_Wallet.coin_image : default_coins} />
       </div>
     </div>
     <button
@@ -327,11 +304,7 @@
       on:click={handleRollSubmit}
       class="sc-iqseJM sc-egiyK cBmlor fnKcEH button button-big bet-button"
     >
-      {#if $Handles_Loading}
-        <div class="button-inner">Loading....</div>
-      {:else}
         <div class="button-inner">Roll Now</div>
-      {/if}
     </button>
   </div>
 </div>
@@ -448,5 +421,8 @@
     left: 1%;
     top: 50%;
     margin-top: -1px;
+  }
+  .gcQjQT {
+      margin-top: 1rem;
   }
 </style>

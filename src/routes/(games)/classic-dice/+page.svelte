@@ -4,15 +4,12 @@ import Gameview from "$lib/games/ClassicDice/gameview.svelte";
 import "$lib/games/ClassicDice/styles/index.css"
 import Controls from "$lib/games/ClassicDice/Controls.svelte";
 import Icon from 'svelte-icons-pack/Icon.svelte';
-import AiFillSound from "svelte-icons-pack/ai/AiFillSound";
-import BiSolidKeyboard from "svelte-icons-pack/bi/BiSolidKeyboard";
-import BiStats from "svelte-icons-pack/bi/BiStats";
 import RiSystemArrowDropRightLine from "svelte-icons-pack/ri/RiSystemArrowDropRightLine";
-import BiSolidAlbum from "svelte-icons-pack/bi/BiSolidAlbum";
-import AiOutlineQuestionCircle from "svelte-icons-pack/ai/AiOutlineQuestionCircle";
-import axios from "axios"
-import {onMount} from "svelte"
+import { onMount } from "svelte";
+import { browser } from '$app/environment'
 import { handleAuthToken } from "$lib/store/routes"
+import { handleSoundManager } from "$lib/games/ClassicDice/audio/SoundManager"
+import { soundManager, turboManager } from "$lib/games/ClassicDice/store/index";
 import Allbet from "$lib/games/ClassicDice/componets/allbet.svelte";
 import Mybet from "$lib/games/ClassicDice/componets/mybet.svelte";
 import Hotkey from "$lib/games/ClassicDice/componets/hotkey.svelte";
@@ -20,39 +17,30 @@ import LiveStats from "$lib/games/ClassicDice/componets/liveStats.svelte";
 import SeedSetting from "$lib/games/ClassicDice/componets/seedSetting.svelte";
 import Help from "$lib/games/ClassicDice/componets/help.svelte";
 import { soundHandler } from "$lib/games/ClassicDice/store/index"
-import {DiceEncription} from '$lib/games/ClassicDice/store/index'
-import { ServerURl } from "$lib/backendUrl"
+import { handleDiceGameEncrypt } from "$lib/games/ClassicDice/hook/gameEncrypt" 
 import { screen, is_open__Appp, is_open__chat } from "$lib/store/screen";
-import Mobile from "./mobile.svelte";
-const URl = ServerURl()
+import { DiceHistory } from "$lib/games/ClassicDice/hook/diceHistory"
 
-let is_loading = false
-const handleDiceGameEncrypt = (async()=>{
-    is_loading = true
-    await axios.get(`${URl}/api/user/dice-game/encrypt`,{
-        headers: {
-        "Content-type": "application/json",
-        "Authorization": `Bearer ${$handleAuthToken}`
-        }
-    })
-    .then((res)=>{
-        is_loading = false
-        DiceEncription.set(res.data[0])
-    })
-    .catch((err)=>{
-        is_loading = false
-        console.log(err)
-    })
+$: is_hotkey = false
+$: is_stats = false
+$: isSeed = false
+$: isHelp = false
+$: loading = true
+$: is_allbet = true
+$: is_mybet = false
+$: is_contest = false
+
+onMount(async()=>{
+  const resion = $handleAuthToken && await handleDiceGameEncrypt($handleAuthToken)
+  $handleAuthToken && await DiceHistory($handleAuthToken)
+  const id = browser && JSON.parse(localStorage.getItem('classic_dice_sound'))
+  const tubor = browser && JSON.parse(localStorage.getItem('classic_dice_tubo'))
+  soundHandler.set(id)
+  turboManager.set(tubor)
+  soundManager.set(handleSoundManager()) 
+  loading = (resion.is_loading)
 })
 
-onMount(()=>{
-  $handleAuthToken && handleDiceGameEncrypt()
-})
-
-
-let is_allbet = true
-let is_mybet = false
-let is_contest = false
 const handleAllbet = ((e) => {
     if (e === 1) {
         is_allbet = true
@@ -68,92 +56,96 @@ const handleAllbet = ((e) => {
     }
 })
 
-let is_hotkey = false
-const handleHotKey = (()=>{
-  is_hotkey = !is_hotkey
-})
-
-let is_stats = false
-let stats = (()=>{
-  is_stats = !is_stats
-})
-let isSeed = false
-const  hanhisSeed = (()=>{
-  isSeed = !isSeed
-})
-
-let isHelp = false
-
-const handleIsHelp = (()=>{
-  isHelp = !isHelp
-})
-
-
 const handleSoundState = (()=>{
     if($soundHandler){
-        soundHandler.set(0)
+        soundHandler.set(null)
+        localStorage.removeItem("classic_dice_sound");
     }else{
-        soundHandler.set(1)
+        soundHandler.set(true)
+        localStorage.setItem("classic_dice_sound", true);
     }
 })
 
+const handleTurbeState = (()=>{
+    if($turboManager){
+        turboManager.set(null)
+        localStorage.removeItem("classic_dice_tubo");
+    }else{
+        turboManager.set(true)
+        localStorage.setItem("classic_dice_tubo", true);
+    }
+})
 
-
+$: newScreen = 0
+  $: {
+    if($is_open__Appp && !$is_open__chat){
+      newScreen = $screen - 240
+    }
+    else if(!$is_open__Appp && $is_open__chat){
+      newScreen = $screen - 432
+    }
+    else if(!$is_open__Appp && !$is_open__chat){
+      newScreen = $screen - 72
+    }
+    else if($is_open__Appp && $is_open__chat){
+      newScreen = $screen - 600
+    }
+}
 
 </script>
-
 {#if is_hotkey}
-  <Hotkey on:close={handleHotKey} />
+  <Hotkey on:close={()=> is_hotkey = false} />
 {/if}
 
 {#if is_stats}
-  <LiveStats on:close={stats} />
+  <LiveStats on:close={()=> is_stats = false} />
 {/if}
 
 {#if isSeed}
-  <SeedSetting on:close={hanhisSeed}/>
+  <SeedSetting on:close={()=> isSeed = false}/>
 {/if}
 
 {#if isHelp}
-<Help on:close={handleIsHelp} />
+    <Help on:close={()=> isHelp = false} />
 {/if}
 
 
-{#if !is_loading}
-
-<div style={`${$is_open__chat && $is_open__Appp && $screen > 1475 || $is_open__chat && !$is_open__Appp && $screen > 1219 || !$is_open__chat && !$is_open__Appp && $screen > 1049 || !$is_open__chat && $is_open__Appp && $screen > 1214 ? "" : "display:none"}`} id="dice-main">
-    <div id="game-ClassicDice" class={`sc-haTkiu lmWKWf game-style0 sc-gDGHff gYWFhf ${$is_open__Appp && `is-open`} ${$is_open__chat && `is-chat`}`}>
+{#if !loading}
+<div id="dice-main">
+    <div id="game-ClassicDice" class={`sc-haTkiu lmWKWf ${newScreen > 1000 ? "game-style0" : "game-style1" }  sc-gDGHff gYWFhf ${$is_open__Appp && `is-open`} ${$is_open__chat && `is-chat`}`}>
         <div class="game-area">
             <div class="game-main">
-                <Controls />
                 <Gameview />
+                <Controls />
                 <div class="game-actions">
                     <button on:click={()=> handleSoundState()} class={`action-item ${$soundHandler ? "active" : ""} `}>
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="sc-gsDKAQ hxODWG icon">
                             <use xlink:href="#icon_SoundOn"></use>
                         </svg>
                     </button>
-                    <button class="action-item  active">
+                    <button on:click={()=> handleTurbeState()} class={`action-item ${$turboManager ? "active" : ""}`}>
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="sc-gsDKAQ hxODWG icon">
                             <use xlink:href="#icon_TurboBet"></use>
                         </svg>
                     </button>
-                    <button on:click={handleHotKey} class="action-item  ">
-                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="sc-gsDKAQ hxODWG icon">
-                            <use xlink:href="#icon_HotKeys"></use>
-                        </svg>
-                    </button>
-                    <button on:click={stats} class="action-item  ">
+                    {#if $screen > 650}
+                        <button on:click={()=> is_hotkey = true} class="action-item  ">
+                            <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="sc-gsDKAQ hxODWG icon">
+                                <use xlink:href="#icon_HotKeys"></use>
+                            </svg>
+                        </button>
+                    {/if}
+                    <button on:click={()=> is_stats = true} class="action-item  ">
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="sc-gsDKAQ hxODWG icon">
                             <use xlink:href="#icon_LiveStats"></use>
                         </svg>
                     </button>
-                    <button on:click={hanhisSeed} class="action-item  " id="set_seed">
+                    <button on:click={()=> isSeed = true} class="action-item  " id="set_seed">
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="sc-gsDKAQ hxODWG icon">
                             <use xlink:href="#icon_Seed"></use>
                         </svg>
                     </button>
-                    <button on:click={handleIsHelp} class="action-item  ">
+                    <button on:click={()=> isHelp = true} class="action-item  ">
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="sc-gsDKAQ hxODWG icon">
                             <use xlink:href="#icon_Help"></use>
                         </svg>
@@ -166,13 +158,13 @@ const handleSoundState = (()=>{
                 <button on:click={()=>handleAllbet(1)} class={`tabs-nav ${is_allbet && "is-active"}`}>All Bets</button>
                 <button on:click={()=>handleAllbet(2)} class={`tabs-nav ${is_mybet && "is-active"}`}>My Bets</button>
                 <button on:click={()=>handleAllbet(3)} class={`tabs-nav ${is_contest && "is-active"}`}>Contest</button>
-        {#if is_allbet}
-            <div class="bg" style={`left: 0%; right: 66.6667%;`}></div>
-        {:else if is_mybet}
-            <div class="bg" style="left: 33.3333%; right: 33.3333%;"></div>
-        {:else if is_contest}
-            <div class="bg" style="left: 66.6667%; right: 0%;"></div>
-        {/if}
+            {#if is_allbet}
+                <div class="bg" style={`left: 0%; right: 66.6667%;`}></div>
+            {:else if is_mybet}
+                <div class="bg" style="left: 33.3333%; right: 33.3333%;"></div>
+            {:else if is_contest}
+                <div class="bg" style="left: 66.6667%; right: 0%;"></div>
+            {/if}
             </div>
             {#if is_allbet}
             <Allbet />
@@ -201,13 +193,10 @@ const handleSoundState = (()=>{
         </div>
     </div>
 </div>
-<div style={`${$is_open__chat && $is_open__Appp && $screen < 1476 || $is_open__chat && !$is_open__Appp && $screen < 1220 || !$is_open__chat && !$is_open__Appp && $screen < 1050 || !$is_open__chat && $is_open__Appp && $screen < 1215  ? "" : "display:none"}`} class="dice-mobile">
-    <Mobile />
-</div>
 {:else}
 <div class="uytutfyh">
     <div class="tdthuy">
-        <img src="https://res.cloudinary.com/dxwhz3r81/image/upload/v1704517117/logoshort_dey3mt.png" alt="">
+        <img src="https://res.cloudinary.com/dxwhz3r81/image/upload/v1697848286/dpp-favicon-logo_j53rwc.jpg" alt="">
     </div>
 </div>
 {/if}

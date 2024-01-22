@@ -19,12 +19,11 @@ $coin_list.forEach(element => {
     }
 });
 
-let networks = { usdt: [
-    
+let networks =[
     {id:1, network: `ERC20`, status: "active"},
     {id:2, network: `TRX20`, status: ""},
     {id:3, network: `BEP20`, status: ""},
-]}
+]
 
 let actice_network = {}
 const handleNetworks = ((e)=>{
@@ -66,6 +65,7 @@ let ispo_loading = false
             deposit_info.set(res.data[0])
         }
         ispo_loading = false
+        console.log(res.data)
     })
     .catch((err)=>{
         is_loading.set(false)
@@ -93,10 +93,11 @@ let is_olii = false
         .then((res)=>{
             is_olii = true
             if(res.data.message !== "success"){
-                err_msg = res.data.message
+                console.log(res.data.message)
             }else{
                 handleFetchPendingOrder()
             }
+            console.log(res.data)
         })
         .catch((err)=>{
             is_olii = true
@@ -182,11 +183,6 @@ const handleCoinSelect = (()=>{
 
             {#if coinSelect}
                 <div class="select-options-wrap" style="top: 100%; opacity: 1; transform: none;">
-                    <div class="ui-input search-input">
-                        <div class="input-control">
-                            <input type="text" placeholder="Search with coin name" autocomplete="off" value="">
-                        </div>
-                    </div>
                     <div class="ui-scrollview select-options len-122">
                         <div class="select-option">
                             <div class="c1uqqykw currency-item notranslate">
@@ -194,36 +190,13 @@ const handleCoinSelect = (()=>{
                                     <img class="coin-icon" alt="" src="https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663">
                                 </div>
                                 <div class="name-wrap">
-                                    <div class="currency-name">BTC</div>
+                                    <div class="currency-name">USDT</div>
                                 </div>
                                 <div class="amount-wrap">
                                     <div class="amount-info">
                                         <div class="cq8kbks coin notranslate monospace">
-                                            <div class="amount amount-str">NGN&nbsp;0.00</div>
+                                            <div class="amount amount-str">{(parseFloat(active_coin.balance)).toFixed(4)}</div>
                                         </div>
-                                    </div>
-                                    <div class="cq8kbks coin notranslate weaken monospace">
-                                        <div class="amount amount-str">0.00</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="select-option">
-                            <div class="c1uqqykw currency-item notranslate">
-                                <div class="coin-wrap">
-                                    <img class="coin-icon" alt="" src="https://assets.coingecko.com/coins/images/325/large/Tether.png?1668148663">
-                                </div>
-                                <div class="name-wrap">
-                                    <div class="currency-name">PEOPLE</div>
-                                </div>
-                                <div class="amount-wrap">
-                                    <div class="amount-info">
-                                        <div class="cq8kbks coin notranslate monospace">
-                                            <div class="amount amount-str">NGN&nbsp;0.00</div>
-                                        </div>
-                                    </div>
-                                    <div class="cq8kbks coin notranslate weaken monospace">
-                                        <div class="amount amount-str">0.00</div>
                                     </div>
                                 </div>
                             </div>

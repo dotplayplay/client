@@ -2,6 +2,7 @@
   import { browser } from "$app/environment";
   import { fly } from "svelte/transition";
   import { cubicOut } from "svelte/easing";
+  import { screen } from "$lib/store/screen";
   import { onMount, createEventDispatcher, onDestroy } from "svelte";
   import lottie from "lottie-web";
   import Point from "./components/point.svelte";
@@ -14,9 +15,7 @@
   const { getCardSuite, suites } = useDeck();
   const { removeTrailingZeros, getSuffix } = useFormatter();
   const { recordGame } = useLiveStats(liveStats, "HILO_LIVE_STATS");
-  import {
-    soundManager,
-    hilo_game,
+  import { soundManager,hilo_game,
     processingRequest,
     userBets,
   } from "$lib/games/hilo/store";
@@ -159,7 +158,7 @@
         style="width: 112.5%; transform: translate(0%, 0px);"
       >
         {#each $userBets.slice(0, 10).reverse() as bet}
-          <div class="recent-item" style="width: 11.1111%;">
+          <div class="recent-item" style={`width: ${$screen > 650 ? 11.1111 : 18}%;`}>
             <div class="item-wrap {bet.won ? 'is-win' : 'is-lose'}">
               {bet.payout.toFixed(2)}x
             </div>

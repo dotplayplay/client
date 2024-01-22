@@ -1,44 +1,15 @@
 <script>
-import { payout , range} from "$lib/games/ClassicDice/store/index"
-import { HandleDicePoint, betPosition, dice_history,Handles_alive, handleOnLose,Autopre_bal, HandleHas_won,winning_track,losing_track,handlediceAutoInput, handleStopOnLose, handleOnwin, rollunder,handleStopOnwin, flix} from "./store/index"
+import { payout, range} from "$lib/games/ClassicDice/store/index"
+import { HandleDicePoint, betPosition, dice_history,Handles_alive, HandleHas_won,
+     rollunder, flix } from "./store/index"
 import Icon from 'svelte-icons-pack/Icon.svelte';
-import { dicegameplays } from "../ClassicDice/store/index"
 import AiOutlineSwap from "svelte-icons-pack/ai/AiOutlineSwap";
-import axios from "axios"
-import {dice_troo, dice_wallet} from "$lib/games/ClassicDice/store/index"
-import { onMount } from "svelte";
-import { isbetLoadingBtn } from "./store";
-import { default_Wallet, coin_list } from "$lib/store/coins";
-import { handleisLoggin, profileStore } from "../../store/profile"
+import { handleisLoggin } from "../../store/profile"
 import HistoryDetails from "./componets/historyDetails.svelte";
-import click from "./audio/click.wav"
-import { handleAuthToken } from "$lib/store/routes"
-import { ServerURl } from "$lib/backendUrl"
-const URl = ServerURl()
-// import { handleTransmit } from "../ClassicDice/AutoControllers.svelte"
-import cr from "./audio/click.wav"
-import win from "./audio/mixkit-achievement-bell-600.wav";
-let rangeEl = 50
-let flip = 50
-
-const handleDiceGameHistory = (async()=>{
-     await axios.get(`${URl}/api/user/dice-game/dice-history`,{
-          headers: {
-            "Content-type": "application/json",
-            'Authorization': `Bearer ${$handleAuthToken}`
-        }})
-        .then((response)=>{
-            dice_history.set(response.data)
-        })
-        .catch((error)=>{
-            console.log(error.response)
-        })
-})
-
-onMount(async()=>{
-    $handleisLoggin && await handleDiceGameHistory()
-})
-
+import { soundManager } from "$lib/games/ClassicDice/store/index";
+import { soundHandler } from "$lib/games/ClassicDice/store/index";
+import { screen } from "$lib/store/screen";
+$: rangeEl = 50
 $:{
     if($range < 0){
         range.set(2)
@@ -50,8 +21,7 @@ $:{
     flix.set(rangeEl)
 }
 
-
-let ishover = false
+$: ishover = false
 const handleRangl = ((w)=>{
     if(w === 1){
         ishover = true
@@ -59,7 +29,6 @@ const handleRangl = ((w)=>{
         ishover = false
     }
 })
-let pop = 0
 
 let houseEgde = 1
 let game__charges = 100 / houseEgde
@@ -93,8 +62,8 @@ $: {
 }
 
 
-let DgII = ''
-let hisQQ = false
+$: DgII = ''
+$: hisQQ = false
 const handleDiceHistoryDetail = ((data)=>{
     if(hisQQ){
         hisQQ = false
@@ -104,24 +73,10 @@ const handleDiceHistoryDetail = ((data)=>{
     }
 })
 
-function playSounRd() {
-    const audio = new Audio(cr);
-    audio.volume = 0.5;
-    audio.play();
-}
-
-// Function to toggle play/pause
-function togglePlayback() {
-  isPlaying = !isPlaying;
-  if (isPlaying) {
-    click.play();
-  } else {
-    click.pause();
-  }
-}
 
 const handleChange = ((e)=>{
-    playSounRd()
+    let sound = $soundManager.audioMap.bet
+    $soundManager.Play(sound, $soundHandler);
     range.set(e)
     let re = 100 - $range
     rangeEl = 100 - $range
@@ -149,72 +104,10 @@ const handleRollUnder = ()=>{
     }
 }
 
-function playSoundR(e) {
-    if(e === 1){
-        const audio = new Audio(cr);
-        audio.volume = 0.05;
-        audio.play();
-    }else{
-        const audio = new Audio(win);
-        audio.volume = 0.05;
-        audio.play();
-    }
-}
 
-let history 
+$: history = []
 $:{
     history  = [...$dice_history]
-}
-
-$:{
-    if($dice_wallet.length > 0){
-        $dice_wallet.forEach(element => {
-        if($profileStore.user_id === element.user_id){
-            let wallet = {
-                coin_name: element.token,
-                coin_image: element.token_img,
-                balance:  element.current_amount
-             }
-             default_Wallet.set(wallet)
-        }
-    });
-    }
-}
-
-
-$:{
-    if($dice_troo.length > 0){
-        $dice_troo.forEach(element => {
-        if($profileStore.user_id === element.user_id){
-            dice_history.set(history)
-            HandleDicePoint.set(element.cashout)
-            history.push(element)
-            isbetLoadingBtn.set()
-            dice_troo.set([])    
-            if(element.has_won){
-                winning_track.set($winning_track += parseFloat(element.profit))
-                if($handleOnwin){
-                    let to = (($handleOnwin/100) * parseFloat($handlediceAutoInput)/1)
-                    let from = (to + parseFloat($handlediceAutoInput)).toFixed(4)
-                    handlediceAutoInput.set(from)
-                }
-                if($handleOnLose){
-                    handlediceAutoInput.set($Autopre_bal)
-                }
-             playSoundR(2)
-             HandleHas_won.set(true)
-            }else{
-                losing_track.set($losing_track += parseFloat(element.bet_amount))
-                if($handleOnLose){
-                    let to = (($handleOnLose/100) * parseFloat($handlediceAutoInput)/1)
-                    let from = (to + parseFloat($handlediceAutoInput)).toFixed(4)
-                    handlediceAutoInput.set(from)
-                }
-                HandleHas_won.set(false)
-            }
-        }
-    }); 
-    }
 }
 
 </script>
@@ -228,9 +121,9 @@ $:{
         <div class="recent-list-wrap">
             {#if $handleisLoggin}
                 {#if $dice_history.length !== 0}
-                <div class="recent-list" style="width: 100%; transform: translate(0%, 0px);">
+                <div class="recent-list" style={`width: ${$screen < 700 ? 160 : 100}%; transform: translate(0%, 0px);`} >
                 {#each $dice_history.slice(-10) as  dice} 
-                    <button  on:click={()=> handleDiceHistoryDetail(dice)} class="recent-item" style="width: 20%;">
+                    <button  on:click={()=> handleDiceHistoryDetail(dice)} class="recent-item" style={`width: ${$screen > 700 ? 100 : 50}%;`}>
                         <div class={`item-wrap ${dice.has_won ? "is-win" : "is-lose"} `}>{(parseFloat(dice.cashout)).toFixed(2)}</div>
                     </button>
                 {/each}
@@ -312,13 +205,15 @@ $:{
                             <span class="right-percent">%</span>
                             <button on:click={()=> range.set(2)} class="amount-scale">Min</button>
                             <button on:click={()=> range.set($range -5)} class="amount-scale">-5</button>
-                            <button on:click={()=> range.set($range +5) }  class="amount-scale">+5</button>
+                            <button on:click={()=> range.set($range + 5)}  class="amount-scale">+5</button>
                             <button on:click={()=> range.set(98)} class="amount-scale">Max</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <svg class="box-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 996 46"><defs><linearGradient id="gcardBg" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#31343C"></stop><stop offset="100%" stop-color="#1E2024" stop-opacity="0"></stop></linearGradient></defs><g opacity=".899"><path fill="url(#gcardBg)" fill-rule="evenodd" d="M0 0h996L892 46H96z" opacity=".598" transform="rotate(-180 498 23)"></path></g></svg>
 
     </div>
 </div>
@@ -334,7 +229,13 @@ $:{
     margin-top: 0.625rem;
     margin-bottom: 0.625rem;
 }
-
+.dqwCNK .box-bg {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: -1px;
+    width: 100%;
+}
 .slider-tip {
     box-sizing: border-box;
     position: absolute;

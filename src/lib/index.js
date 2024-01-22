@@ -46,120 +46,67 @@ const handleprofile = async (auth) => {
 };
 
 
-const handleBTCwallet = async () => {
-    const response = auth && await fetch(
-        `${URL}/api/wallet/btc-wallet`,{
-            method: "GET",
-            headers: {
-            "Content-type": "application/json",
-            "Authorization": `Bearer ${auth}`
-            },
-        }
-        );
-        const json = await response.json();
-        if (response.ok) {
-        return json[0]
-        }
-    };
-
-    const handleETHwallet = async () => {
-        const response = auth && await fetch(
-            `${URL}/api/wallet/eth-wallet`,{
-                method: "GET",
-                headers: {
-                "Content-type": "application/json",
-                "Authorization": `Bearer ${auth}`
-                },
-            }
-            );
-            const json = await response.json();
-            if (response.ok) {
-            return json[0]
-            }
-        };
-                   
-    const handleDOGEwallet = async () => {
-        const response = await fetch(
-            `${URL}/api/wallet/doge-wallet`,{
-                method: "GET",
-                headers: {
-                "Content-type": "application/json",
-                "Authorization": `Bearer ${auth}`
-                },
-            }
-            );
-            const json = await response.json();
-            if (response.ok) {
-                return json[0] 
-            }
-        };
-        
-const handleLTCwallet = async () => {
-    const response = await fetch(
-        `${URL}/api/wallet/ltc-wallet`,{
-            method: "GET",
-            headers: {
-            "Content-type": "application/json",
-            "Authorization": `Bearer ${auth}`
+const handlePPDwallet = async () => {
+    const response =
+      (await fetch(`${URL}/api/wallet/ppd-wallet`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${auth}`,
         },
-        }
-    );
+      }));
     const json = await response.json();
     if (response.ok) {
-        return json[0] 
+      return json[0];
     }
-};
-const handleUSDTwallet = async () => {
-    const response = await fetch(
-        `${URL}/api/wallet/usdt-wallet`,{
-        method: "GET",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": `Bearer ${auth}`
-        },
-        }
-    );
-const json = await response.json();
+  };
+
+  const handlePPLwallet = async () => {
+    const response = await fetch(`${URL}/api/wallet/ppl-wallet`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${auth}`,
+      },
+    });
+    const json = await response.json();
     if (response.ok) {
-        return json[0]
+      return json[0];
     }
-};
+  };
 
-const handleBNBwallet = async () => {
-    const response = await fetch(
-        `${URL}/api/wallet/bnb-wallet`,{
-        method: "GET",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": `Bearer ${auth}`
-        },
-        }
-    );
-const json = await response.json();
+  const handlePPFwallet = async () => {
+    const response = await fetch(`${URL}/api/wallet/ppf-wallet`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${auth}`,
+      },
+    });
+    const json = await response.json();
     if (response.ok) {
-        return json[0]
+      return json[0];
     }
-};
-
-const handleTRXwallet = async () => {
-    const response = await fetch(
-        `${URL}/api/wallet/trx-wallet`,{
-        method: "GET",
-        headers: {
-            "Content-type": "application/json",
-            "Authorization": `Bearer ${auth}`
-        },
-        }
-    );
-const json = await response.json();
+  };
+  const handleUSDTwallet = async () => {
+    const response = await fetch(`${URL}/api/wallet/usdt-wallet`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${auth}`,
+      },
+    });
+    const json = await response.json();
     if (response.ok) {
-        return json[0]
+      return json[0];
     }
-};
+  };
 
-
-    return { handleprofile,handleETHwallet,
-         handleUSDTwallet, handleLTCwallet,
-          handleDOGEwallet, handleBTCwallet, handleBNBwallet,handleTRXwallet
-         }
+  return {
+    handleprofile,
+    handleUSDTwallet,
+    handlePPFwallet,
+    handlePPLwallet,
+    handlePPDwallet,
+  };
 };

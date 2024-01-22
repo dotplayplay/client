@@ -93,6 +93,7 @@
       });
     }
   });
+  
   onDestroy(() => {
     $soundManager?.stop();
   });

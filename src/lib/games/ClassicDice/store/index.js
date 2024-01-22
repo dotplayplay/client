@@ -79,10 +79,8 @@ export let losing_track = writable(Losing_trackEl)
 let handleOnLoseEl = 0
 export let handleOnLose = writable(handleOnLoseEl)
 
-
 let prev = 0
 export let Autopre_bal = writable(prev)
-
 
 let s_alive = false
 export let Handles_alive = writable(s_alive)
@@ -92,3 +90,12 @@ export let Handles_Loading = writable(s_aloading)
 
 let _liveStats = null;
 export let liveStats = writable(_liveStats);
+
+let _soundSettings = {music: false, soundFx: false};
+export let soundSettings = writable(_soundSettings)
+
+let _soundManager = null;
+export let soundManager = writable(_soundManager);
+
+let _turbo = null;
+export let turboManager = writable(_turbo);

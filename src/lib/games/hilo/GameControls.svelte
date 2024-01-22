@@ -1,6 +1,6 @@
 <script>
   import { browser } from "$app/environment";
-  import { screen } from "$lib/store/screen";
+  import { screen, is_open__Appp, is_open__chat } from "$lib/store/screen";
   import { onMount, createEventDispatcher } from "svelte";
   import { default_Wallet } from "$lib/store/coins";
   import { goto } from "$app/navigation";
@@ -264,7 +264,6 @@
     };
 
     browser && window.addEventListener("keydown", handleKeyDown);
-
     return () => {
       // Cleanup when component is unmounted
       window.removeEventListener("keydown", handleKeyDown);
@@ -273,9 +272,27 @@
       document.body.removeEventListener("pointermove", handleSliderMove);
     };
   });
+
+  $: newScreen = 0
+  $: {
+    if($is_open__Appp && !$is_open__chat){
+      newScreen = $screen - 240
+    }
+    else if(!$is_open__Appp && $is_open__chat){
+      newScreen = $screen - 432
+    }
+    else if(!$is_open__Appp && !$is_open__chat){
+      newScreen = $screen - 72
+    }
+    else if($is_open__Appp && $is_open__chat){
+      newScreen = $screen - 600
+    }
+  }
+
+
 </script>
 
-<div id="Hilo-control-0" class="sc-hLVXRe cYiOHZ game-control style0  {$screen < 1292 ? "mobile-view" : ""}">
+<div id="Hilo-control-0" class="sc-hLVXRe cYiOHZ game-control style0  {newScreen < 1000 ? "mobile-view" : ""}">
   <div class="game-control-panel">
     <div class="sc-fSDTwv kqpylJ">
       <div class="sc-fUQcsx kqrzPs betting">

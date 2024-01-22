@@ -79,6 +79,7 @@
   border-radius: 1.25rem;
   cursor: pointer;
   z-index: 9;
+  margin-left: 10px;
 }
 .fhlUmF .user-wrap {
   display: flex;

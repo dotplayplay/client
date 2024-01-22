@@ -193,54 +193,58 @@
           <Icon src={FiMenu}  size="12"   color="#fff"  />
         </span>
       </button>
-      {#if !$handleisLoggin}
+    
         <div class="header-login">
+          {#if !$handleisLoggin}
           <button on:click={()=> goto("/login")}>Sign in</button>
           <button on:click={()=> goto("/register")} class="sc-iqseJM sc-egiyK cBmlor fnKcEH button button-normal">
             <div class="button-inner">Sign up</div>
           </button>
-        </div>
-        {:else}
-        <div class="sc-gjNHFA jlttqa wallet-enter">
-          <button class="sc-fmciRz LQlWw">
-            <button on:click={()=> coinsEL =! coinsEL} class="sc-iFMAIt icGouR">
-              <div class="sc-eXlEPa boxpOO">
-                <img class="coin-icon" alt="" src={$default_Wallet.coin_image}>
-                <span class="currency">{$default_Wallet.coin_name}</span>
-                <Icon src={RiSystemArrowDownSLine} size="18" color={ "rgba(153, 164, 176, 0.8)"} className="custom-icon" /> 
-              </div>
-              <div class="sc-Galmp erPQzq coin notranslate balance">
-                <div class="amount">
-                  <span class="amount-str">{(parseFloat($default_Wallet.balance)).toFixed(6)}</span>
+          {:else}
+          <div class="sc-gjNHFA jlttqa wallet-enter">
+            <button class="sc-fmciRz LQlWw">
+              <button on:click={()=> coinsEL =! coinsEL} class="sc-iFMAIt icGouR">
+                <div class="sc-eXlEPa boxpOO">
+                  <img class="coin-icon" alt="" src={$default_Wallet.coin_image}>
+                  <span class="currency">{$default_Wallet.coin_name}</span>
+                  <Icon src={RiSystemArrowDownSLine} size="18" color={ "rgba(153, 164, 176, 0.8)"} className="custom-icon" /> 
                 </div>
-              </div>
+                <div class="sc-Galmp erPQzq coin notranslate balance">
+                  <div class="amount">
+                    <span class="amount-str">{(parseFloat($default_Wallet.balance)).toFixed(6)}</span>
+                  </div>
+                </div>
+              </button>
+              <button on:click={()=> deposit = true} class="sc-iqseJM sc-bqiRlB cBmlor eWZHfu button button-normal sc-iqVWFU fGPfpD">
+                <div class="button-inner">
+                  <Icon src={IoWallet} size="18" color="#ffff" className="custom-icon" />
+                  <span>Deposit</span>
+                </div>
+              </button>
             </button>
-            <button on:click={()=> deposit = true} class="sc-iqseJM sc-bqiRlB cBmlor eWZHfu button button-normal sc-iqVWFU fGPfpD">
-              <div class="button-inner">
-                <Icon src={IoWallet} size="18" color="#ffff" className="custom-icon" />
-                <span>Deposit</span>
+            {#if coinsEL}
+              <Coins on:coinDefault={()=> coinsEL =! coinsEL}/>
+            {/if}
+          </div>
+           <div class="sc-gnnDb fhlUmF">
+                <div  class="user-wrap">
+                  <a href={`/user/profile/${$profileStore.user_id}`}>
+                    <img class="avatar " alt="" src={$profileStore.profile_image}>
+                  </a>
+                  <button on:click={()=> profileNAV =! profileNAV} class="svg">
+                    <Icon src={AiOutlineMenuUnfold} size="23" color={"rgba(153, 164, 176, 0.8)"} className="custom-icon" />
+                  </button>
+                </div>
+                {#if profileNAV}
+                  <Navprofile />
+                {/if}
+                
               </div>
-            </button>
-          </button>
-          {#if coinsEL}
-            <Coins on:coinDefault={()=> coinsEL =! coinsEL}/>
-          {/if}
-        </div>
-         <div class="sc-gnnDb fhlUmF">
-              <div  class="user-wrap">
-                <a href={`/user/profile/${$profileStore.user_id}`}>
-                  <img class="avatar " alt="" src={$profileStore.profile_image}>
-                </a>
-                <button on:click={()=> profileNAV =! profileNAV} class="svg">
-                  <Icon src={AiOutlineMenuUnfold} size="23" color={"rgba(153, 164, 176, 0.8)"} className="custom-icon" />
-                </button>
-              </div>
-              {#if profileNAV}
-                <Navprofile />
               {/if}
-              
-            </div>
-      {/if}
+        </div>
+     
+   
+   
 
         
       </div>
@@ -426,6 +430,13 @@
     height: 100%;
     width: 5.25rem;
   }
+  .jVgBRe .login-top .header-login button {
+    height: 2.5rem;
+    text-align: center;
+    margin-left: 13px;
+    color: #ffff;
+    font-weight: bold;
+}
 }
 .euzHLF .wallet-enter {
     margin-right: 24px;
@@ -495,18 +506,7 @@
     align-items: center;
     margin-left: auto;
 }
-.jVgBRe .login-top .header-login button {
-    width: 6.25rem;
-    height: 2.5rem;
-    line-height: 2.5rem;
-    text-align: center;
-    color: #ffff;
-    font-weight: bold;
-}
-.jVgBRe .login-top .header-login button {
-    width: 6.25rem;
-    height: 2.5rem;
-}
+
 
 @media screen and (min-width: 1080px) and (max-width: 1440px){
   .euzHLF .wallet-enter {
@@ -519,6 +519,19 @@
     height: 100%;
     width: 7.25rem;
   }
+  .jVgBRe .login-top .header-login button {
+    width: 6.25rem;
+    height: 2.5rem;
+}
+.jVgBRe .login-top .header-login button {
+    width: 6.25rem;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    text-align: center;
+    color: #ffff;
+    font-weight: bold;
+}
+
 }
 
 </style>

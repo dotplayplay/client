@@ -1,37 +1,32 @@
 <script>
-import { goto } from "$app/navigation";    
 import Icon from 'svelte-icons-pack/Icon.svelte';
 import RiSystemArrowUpSLine from "svelte-icons-pack/ri/RiSystemArrowUpSLine";
 import RiSystemArrowDownSLine from "svelte-icons-pack/ri/RiSystemArrowDownSLine";
 import { default_Wallet } from '../../store/coins';
-import { profileStore,handleisLoggin } from "$lib/store/profile"
-import { handleAuthToken } from "$lib/store/routes"
-import { payout, isbetLoadingBtn, betPosition } from "./store";
-import {DiceEncription} from '$lib/games/ClassicDice/store/index'
-import { error_msg, handlediceAutoInput,Handles_alive, onWin,winning_track,losing_track,Autopre_bal, handleStopOnLose,
-    handleOnLose, HandleDicePoint,handleStopOnwin, handleOnwin, rollunder ,dice_history, HandleHas_won } from "../ClassicDice/store/index"
-import {ServerURl} from "$lib/backendUrl"
-const URL = ServerURl()
-import { onMount  } from "svelte";
-import { handleCountdown } from "../ClassicDice/socket/index";
-const { handleDicebet } = handleCountdown()
-import cr from "./audio/click-button-140881.mp3"
-import win from "./audio/mixkit-achievement-bell-600.wav"
+import { profileStore, handleisLoggin } from "$lib/store/profile";
+import { DiceBet } from "../ClassicDice/hook/manualEngine";
+import { handleAuthToken } from "$lib/store/routes";
+import { dice_history } from "../ClassicDice/store/index";
+import { payout, betPosition } from "./store";
+import { soundManager, turboManager} from "$lib/games/ClassicDice/store/index";
+import {DiceEncription} from '$lib/games/ClassicDice/store/index';
+import { error_msg, handlediceAutoInput,Handles_alive,handleOnLose,
+ winning_track,losing_track,Autopre_bal, handleStopOnLose,HandleHas_won,
+handleStopOnwin, handleOnwin, rollunder } from "../ClassicDice/store/index";
+import { soundHandler } from "$lib/games/ClassicDice/store/index";
+import { onMount } from "svelte";
 
 let is_min_max = false
 const handleMinMax = (()=>{
    is_min_max = !is_min_max
 })
 
-let uiocd = 0
 let wining_amount = '' ;
-
 let walletRange = 0
 let x = 0;
-
 onMount(()=>{
-    if($default_Wallet.coin_name === "TRX"){
-            handlediceAutoInput.set((0.20).toFixed(4))
+    if($default_Wallet.coin_name === "USDT"){
+            handlediceAutoInput.set((0.10).toFixed(4))
     }else{
         handlediceAutoInput.set((100).toFixed(4))
     }
@@ -41,31 +36,19 @@ $:{
     wining_amount = ($handlediceAutoInput * $payout).toFixed(4)
 }
 
-let bet_number = 0
-let on_win = false
-let onWinEl = 0
+$: bet_number = 0
+$: on_win = false
+$: onWinEl = 0
+$: on_lose = false
+$: onLoseEl = 0
 
-let on_lose = false
-let onLoseEl = 0
+$: stopOnwin = 0
+$: stopOnlose = 0
 
-let stopOnwin = 0
-let stopOnlose = 0
+$: is_Looping = false
+$: yu = ""
+$: turbo = $turboManager ? 400 : 1000
 
-let is_Looping = false
-let yu 
-let turbo = 1000
-
-function playSound(e) {
-    if(e === 1){
-        const audio = new Audio(cr);
-        audio.volume = 0.5;
-        audio.play();
-    }else{
-        const audio = new Audio(win);
-        audio.volume = 0.1;
-        audio.play();
-    }
-}
 
 const dive = (()=>{
     handlediceAutoInput.set(($handlediceAutoInput / 2).toFixed(4))
@@ -100,7 +83,6 @@ const handlePreBetamout = ((event)=>{
 })
 
 let lose_track = 0
-
 let bet_num_count = 1
 let load = false
 const handleAutoStart = (()=>{
@@ -139,7 +121,7 @@ const handleAutoStart = (()=>{
                 }
             }
             else if($handleStopOnLose){
-                if($losing_track >= $handleStopOnLose ){
+                if(onLoseEl >= $handleStopOnLose ){
                     is_Looping = false
                     clearInterval(yu)   
                     losing_track.set(0)
@@ -152,7 +134,6 @@ const handleAutoStart = (()=>{
                 handleRollSubmit()
             }
         }
-
         }, turbo)
     }else{
         is_Looping = false
@@ -162,17 +143,13 @@ const handleAutoStart = (()=>{
         handlediceAutoInput.set((parseFloat(s)).toFixed(5))
     }
 })
- 
-// $: console.log($handleStopOnwin, $winning_track)
 
-let history 
-$:{
-    history  = [...$dice_history]
-}
 
-let non = 1
+$: non = 1
 const handleRollSubmit = (async()=>{
-    // if(browser && window.navigator.onLine){
+    let sound = $soundManager.audioMap.bet
+    let winSound = $soundManager.audioMap.win
+     $soundManager.Play(sound, $soundHandler);
     if($handleisLoggin){
         if(parseFloat($default_Wallet.balance) <= 0){
             error_msg.set("insufficient balance")
@@ -242,29 +219,41 @@ const handleRollSubmit = (async()=>{
                 is_roll_under:$rollunder,
                 wining_amount: parseFloat(wining_amount) - parseFloat($handlediceAutoInput)
             }
-            Handles_alive.set(true)
             non += 1
-            setTimeout(()=>{
-            handleDicebet(data)
-            },1000)
+           const response = await DiceBet(data, $handleAuthToken)
+           if(response.has_won){
+            winning_track.set($winning_track += parseFloat(response.profit))
+                if($handleOnwin){
+                    let to = (($handleOnwin/100) * parseFloat($handlediceAutoInput)/1)
+                    let from = (to + parseFloat($handlediceAutoInput)).toFixed(4)
+                    handlediceAutoInput.set(from)
+                }
+                if($handleOnLose){
+                    handlediceAutoInput.set($Autopre_bal)
+                }
+                $soundManager.Play(winSound, $soundHandler);
+                HandleHas_won.set(true)
+            }
+            else{
+                onLoseEl = onLoseEl += parseFloat(response.bet_amount)
+                if($handleOnLose){
+                    let to = (($handleOnLose / 100) * parseFloat($handlediceAutoInput)/1)
+                    let from = (to + parseFloat($handlediceAutoInput)).toFixed(4)
+                    handlediceAutoInput.set(from)
+                }
+                HandleHas_won.set(false)
+            }
+           dice_history.set([...$dice_history, response])
+       
         }
     }else{
         error_msg.set("You are not Logged in")
         clearInterval(yu)
         is_Looping = false
         setTimeout(()=>{
-            goto("/login")
             error_msg.set("")
         },4000)
     }
-// }else{
-//     error_msg.set('Error in network connection')
-//     is_Looping = false
-//     clearInterval(yu)
-//     setTimeout(()=>{
-//         error_msg.set('')
-//      },4000)
-// }
 })
 
 const handlesjen = ((e)=>{
@@ -344,8 +333,8 @@ const handlesjen = ((e)=>{
                     {/if}
 
                     <button disabled={$Handles_alive} on:click={handleMinMax} class="sc-cAhXWc cMPLfC">
-                        <Icon src={RiSystemArrowUpSLine}  size="80"  color="rgba(153, 164, 176, 0.6)"  title="min" />
-                        <Icon src={RiSystemArrowDownSLine}  size="80"  color="rgba(153, 164, 176, 0.6)"  title="max" />
+                        <Icon src={RiSystemArrowUpSLine}  size="80"  color="rgba(153, 164, 176, 0.6)"   />
+                        <Icon src={RiSystemArrowDownSLine}  size="80"  color="rgba(153, 164, 176, 0.6)"   />
                     </button>
                 </div>
             </div>
@@ -383,7 +372,7 @@ const handlesjen = ((e)=>{
                 Stop on win<div class="label-amount">0 USD</div>
             </div>
             <div class="input-control">
-                <input type="number" bind:value={stopOnwin}>
+                <input type="number" disabled={$Handles_alive} bind:value={$handleStopOnwin}>
             {#if $handleisLoggin}
                 <img class="coin-icon" alt="" src={$default_Wallet.coin_image}>
              {/if}
@@ -393,7 +382,7 @@ const handlesjen = ((e)=>{
         <div class="sc-ezbkAF hzTJOu input sc-gqtqkP cTKsPy">
             <div class="input-label">On lose</div>
             <div class="input-control">
-                <input type="number" readonly={!on_lose} bind:value={onLoseEl}>
+                <input type="number" readonly={!on_lose} bind:value={$handleOnLose}>
                 <div class={`sc-cxVPaa ${on_lose ? "kvRMBr"  : "eIHoct"}  increase-switch`}>
                     <button on:click={()=> on_lose = !on_lose}  class="dot-wrap">
                         <div class="dot"></div>

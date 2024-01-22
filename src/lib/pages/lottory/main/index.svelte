@@ -1,5 +1,6 @@
 <script>
   import { slide, fade } from "svelte/transition";
+  import { screen } from "$lib/store/screen"
   import { goto } from "$app/navigation";
   import moment from "moment";
   import { handleisLoggin } from "$lib/store/profile";
@@ -205,7 +206,7 @@
 {/if}
 
 {#if !loading}
-  <div id="main" class="sc-zjkyB jlxrhk">
+  <div class="sc-zjkyB jlxrhk">
     <div class="sc-gDGHff jtyGOM lottery-header">
       <div class="wrap">
         <div class="period">
@@ -213,8 +214,7 @@
         </div>
         <a href="#lottery_rule" class="rule">Rules</a>
         <button on:click={() => (provablyFairD = { tab: 1 })} class="fairness"
-          >Provably Fair</button
-        >
+          >Provably Fair</button>
         <div class="cont">
           <div class="next-time">
             <div class="txt">
@@ -683,11 +683,11 @@
       </div>
       <div class="sc-bjztik biQums lottery-subheader">
         <div class="cont sh">
-          <div class="title">What Is <span>NNL</span>?</div>
+          <div class="title">What Is <span>PPF</span>?</div>
           <div class="desc">
-            NNL (NG Lottery) is a token created by NANOGAMES.IO for players who
-            love the Lottery. You can use NNL to redeem lottery tickets in the
-            Lottery at any time, 1 NNL = 1 lottery ticket.
+            PPL (DPP Lottery) is a token created by DOTPLAYPLAY.COM for players who
+            love the Lottery. You can use PPL to redeem lottery tickets in the
+            Lottery at any time, 1 PPL = 1 lottery ticket.
           </div>
           <div class="btn">
             <button

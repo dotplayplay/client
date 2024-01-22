@@ -1,5 +1,7 @@
 <script>
     import { browser } from "$app/environment";
+    import Icon from 'svelte-icons-pack/Icon.svelte';
+  import IoCloseSharp from "svelte-icons-pack/io/IoCloseSharp"
     import { createEventDispatcher, onMount } from "svelte";
     import useFormatter from "$lib/hook/formatter";
     import useLiveStats from "$lib/hook/livestats";
@@ -161,12 +163,9 @@
     >
       Live Stats
     </div>
-    <button on:click={() => dispatch("close")} class="dragpop-close hover"
-      ><svg
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        class="sc-gsDKAQ hxODWG icon"><use xlink:href="#icon_Close"></use></svg
-      ></button
-    >
+    <button on:click={()=> dispatch("close")}  class="sc-ieecCq fLASqZ close-icon dialog-close">
+      <Icon src={IoCloseSharp}  size="23"  color="rgba(153, 164, 176, 0.6)" className="custom-icon" />
+    </button>
     <div class="dragpop-content">
       <div class="sc-dkPtRN jScFby scroll-view sc-eBTqsU eLzuEc">
         <div class="sc-zjkyB jElDBn">
@@ -272,18 +271,6 @@
     .JLcsN .dragpop-title.grabbing {
       cursor: grabbing;
     }
-    .JLcsN .dragpop-close {
-      position: absolute;
-      right: 0px;
-      top: 0px;
-      display: flex;
-      -webkit-box-align: center;
-      align-items: center;
-      -webkit-box-pack: center;
-      justify-content: center;
-      width: 3.125rem;
-      height: 3.125rem;
-    }
     .JLcsN .dragpop-close .icon {
       width: 0.875rem;
       height: 0.875rem;
@@ -364,10 +351,6 @@
     }
     .dQxvCn .chart-cont .item-wrap.wagered {
       flex: 1 1 0%;
-    }
-    .hover:hover svg {
-      transform: rotate(-90deg);
-      fill: rgb(245, 246, 247);
     }
     .erPQzq {
       display: inline-flex;

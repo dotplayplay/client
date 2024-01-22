@@ -1818,22 +1818,6 @@
     filter: none !important;
   }
 
-  .dialog {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    left: 50%;
-    top: 50%;
-    width: 464px;
-    height: 720px;
-    margin: -375px 0px 0px -280px;
-    transition-property: width, height, margin-left, margin-top;
-    transition-duration: 0.5s;
-    border-radius: 1.25rem;
-    overflow: hidden;
-    background: var(--affiliate-bg);
-  }
-
   .dialog-head {
     position: relative;
     z-index: 10;

@@ -201,7 +201,7 @@ const handleStatistics = (()=>{
                    User Information
                </div>
            </button>
-               <button disabled on:click={()=> goto("/wallet/balance")} class="link-item">
+               <button on:click={()=> goto("/wallet/balance")} class="link-item">
                    <div class="hover">
                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" class="sc-gsDKAQ hxODWG icon">
                            <use xlink:href="#icon_Wallet"></use>
